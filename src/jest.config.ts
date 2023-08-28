@@ -7,7 +7,7 @@ const jestConfig: JestConfigWithTsJest = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   roots: ['<rootDir>'],
-  coverageDirectory: '<rootDir>/../coverage',
+  coverageDirectory: '<rootDir>/../jest-reports/coverage',
   modulePaths: [compilerOptions.baseUrl],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
   testMatch: ['**/*.spec.ts'],

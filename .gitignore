@@ -51,6 +51,7 @@ __azurite_db*__.json
 .DS_Store
 
 # Tests
+jest-reports
 test-report.xml
 coverage
 .scannerwork
