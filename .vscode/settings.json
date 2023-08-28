@@ -7,7 +7,7 @@
   "azureFunctions.preDeployTask": "npm prune (functions)",
   "terminal.integrated.cwd": "${workspaceFolder}/src",
   "terminal.integrated.env.osx": {
-    "ZSH_INIT_COMMAND_SVRLSSCTR": "source ../.vscode/dev-environment-init.sh"
+    "ZSH_INIT_COMMAND_SVRLSSPDF": "source ../.vscode/dev-environment-init.sh"
   },
   "terminal.integrated.profiles.osx": {
     "zsh": {
