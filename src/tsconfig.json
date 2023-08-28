@@ -4,7 +4,13 @@
     "target": "es6",
     "outDir": "../dist",
     "rootDir": ".",
+    "baseUrl": ".",
+    "noEmit": true,
+    "resolveJsonModule": true,
     "sourceMap": true,
-    "strict": true
+    "strict": true,
+    "paths": {
+      "@shared/*": ["shared/*"]
+    }
   }
 }

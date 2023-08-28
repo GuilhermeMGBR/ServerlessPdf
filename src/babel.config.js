@@ -46,6 +46,7 @@ const babelConfig = {
         alias: convertToBabelAliases(compilerOptions?.paths),
       },
     ],
+    ['inline-json-import', {}],
   ],
   ignore: [/node_modules/],
 };

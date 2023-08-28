@@ -49,3 +49,6 @@ __azurite_db*__.json
 
 # macOS only
 .DS_Store
+
+# Tests
+test-report.xml
