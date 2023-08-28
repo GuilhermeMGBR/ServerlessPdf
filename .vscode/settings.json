@@ -5,5 +5,6 @@
   "azureFunctions.projectRuntime": "~4",
   "debug.internalConsoleOptions": "neverOpen",
   "azureFunctions.preDeployTask": "npm prune (functions)",
-  "terminal.integrated.cwd": "${workspaceFolder}/src"
+  "terminal.integrated.cwd": "${workspaceFolder}/src",
+  "editor.tabSize": 2
 }
