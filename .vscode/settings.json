@@ -23,11 +23,16 @@
   },
   "editor.tabSize": 2,
   "cSpell.words": [
+    "azurefunctions",
+    "azuretools",
+    "devcontainers",
     "funcignore",
     "maxdepth",
     "Parens",
     "postbuild",
     "prestart",
-    "sonarqube"
+    "sonarlint",
+    "sonarqube",
+    "sonarsource"
   ]
 }
