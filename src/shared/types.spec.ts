@@ -1,4 +1,5 @@
 import {
+  stringWith254Characters,
   unwrapInvalidData,
   unwrapValidData,
   zodEmptyString,
@@ -6,10 +7,7 @@ import {
   zodStringWithLettersNumbersOrSpaces,
 } from './types';
 
-export const stringWith254Characters =
-  'LoremipsumdolorsitametconsectetueradipiscingelitAeneancommodoligulaegetdolorAeneanmassaCumsociisnatoquepenatibusetmagnisdisparturientmontesnasceturridiculusmusDonecquamfelisultriciesnecpellentesqueeupretiumquissemNullaconsequatmasjshdueoldhadwiurfmfkvius';
-
-describe('types', () => {
+describe('Types', () => {
   describe('zodEmptyString', () => {
     it.each([
       ['valid', ''],

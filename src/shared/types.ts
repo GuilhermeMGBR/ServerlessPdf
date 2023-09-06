@@ -1,6 +1,9 @@
 import {z, ZodSchema} from 'zod';
 import type {Invalid} from './BaseService/BaseService.types';
 
+export const stringWith254Characters =
+  'LoremipsumdolorsitametconsectetueradipiscingelitAeneancommodoligulaegetdolorAeneanmassaCumsociisnatoquepenatibusetmagnisdisparturientmontesnasceturridiculusmusDonecquamfelisultriciesnecpellentesqueeupretiumquissemNullaconsequatmasjshdueoldhadwiurfmfkvius';
+
 const lettersNumbersOrSpaces = /^[a-zA-Z0-9 ]*$/;
 
 export const zodEmptyString = z.string().max(0);
