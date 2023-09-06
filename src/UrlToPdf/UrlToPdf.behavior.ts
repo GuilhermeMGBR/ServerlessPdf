@@ -12,16 +12,23 @@ const INVALID_PARAMS_MESSAGE = 'Invalid params';
 
 export const urlToPdfBehavior: IServiceBehavior<UrlToPdfParams> = {
   validateParams: (logger, params, query, body) => {
-    if (hasParams(params) && unwrapValidParams(params)) {
+    const hasRouteParams = hasParams(params);
+    if (hasRouteParams && unwrapValidParams(params)) {
       return getValidParamsResult(params);
     }
 
-    if (hasParams(query) && unwrapValidParams(query)) {
+    const hasQueryParams = hasParams(query);
+    if (hasQueryParams && unwrapValidParams(query)) {
       return getValidParamsResult(query);
     }
 
-    if (hasParams(body) && unwrapValidParams(body)) {
+    const hasBodyParams = hasParams(body);
+    if (hasBodyParams && unwrapValidParams(body)) {
       return getValidParamsResult(body);
+    }
+
+    if (!hasRouteParams && !hasQueryParams && !hasBodyParams) {
+      return getValidParamsResult({});
     }
 
     logger.warn(

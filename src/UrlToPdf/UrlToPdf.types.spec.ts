@@ -25,11 +25,11 @@ describe('UrlToPdf:types', () => {
 
   describe('unwrapValidParams', () => {
     it.each([
-      ['invalid', undefined],
       ['invalid', null],
+      ['invalid', undefined],
       ['invalid', ''],
-      ['invalid', {name: ''}],
       ['invalid', {name: stringWith254Characters + 'abc'}],
+      ['valid', {name: ''}],
       ['valid', {name: 'Valid Name'}],
       ['valid', {name: 'John'}],
     ])('unwraps %s string (%s)', (scenario: string, params: unknown) => {

@@ -3,6 +3,8 @@ import type {Invalid} from './BaseService/BaseService.types';
 
 const lettersNumbersOrSpaces = /^[a-zA-Z0-9 ]*$/;
 
+export const zodEmptyString = z.string().max(0);
+
 export const zodStringWithLettersNumbersOrSpaces = z
   .string()
   .trim()

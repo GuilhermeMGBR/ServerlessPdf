@@ -1,6 +1,7 @@
 import {
   unwrapInvalidData,
   unwrapValidData,
+  zodEmptyString,
   zodNonEmptyStringWithUpto255LettersNumbersOrSpaces,
   zodStringWithLettersNumbersOrSpaces,
 } from './types';
@@ -9,6 +10,18 @@ export const stringWith254Characters =
   'LoremipsumdolorsitametconsectetueradipiscingelitAeneancommodoligulaegetdolorAeneanmassaCumsociisnatoquepenatibusetmagnisdisparturientmontesnasceturridiculusmusDonecquamfelisultriciesnecpellentesqueeupretiumquissemNullaconsequatmasjshdueoldhadwiurfmfkvius';
 
 describe('types', () => {
+  describe('zodEmptyString', () => {
+    it.each([
+      ['valid', ''],
+      ['invalid', 'string'],
+      ['invalid', 'string with spaces'],
+    ])('unwraps %s string (%s)', async (scenario: string, params: unknown) => {
+      const allParamsAreValid = unwrapValidData(zodEmptyString)(params);
+
+      expect(allParamsAreValid).toBe(scenario === 'valid');
+    });
+  });
+
   describe('zodStringWithLettersNumbersOrSpaces', () => {
     it.each(['', 'string', '123', 'str1ng5', 'str1ng5', 'string with spaces'])(
       'unwraps %p as valid string',
