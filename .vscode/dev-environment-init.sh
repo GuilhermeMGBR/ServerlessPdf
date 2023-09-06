@@ -13,3 +13,6 @@ if foundSecretsFile; then
 
   echo Loaded .secrets
 fi
+
+alias y=yarn
+echo Setting \'y\' as \'yarn\' alias
