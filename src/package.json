@@ -11,7 +11,7 @@
     "type-check": "tsc -noEmit",
     "watch:type-check": "tsc -noEmit -w",
     "build": "yarn build:only",
-    "postbuild": "find . -maxdepth 2 -name '*function.json' | xargs -I {} cp {} ../dist/{}; cp host.json .funcignore package.json yarn.lock local.settings.json ../dist; cd ../dist; yarn install --production",
+    "postbuild": "yarn dist:copy-function-files; yarn dist:install-modules",
     "build:only": "npx babel . --extensions '.ts,.tsx' --out-dir ../dist",
     "watch:build": "yarn build -w",
     "prestart": "yarn build",
@@ -45,6 +45,9 @@
     "ss": "yarn sonar-server:start",
     "ssp": "yarn sonar-server:start-persistent",
     "pc": "yarn pre-commit",
+    "dist:copy-function-files": "yarn dist:copy-function.json; cp host.json .funcignore package.json yarn.lock local.settings.json ../dist;",
+    "dist:copy-function.json": "find . -maxdepth 2 -name '*function.json' | xargs -I {} cp {} ../dist/{};",
+    "dist:install-modules": "cd ../dist; yarn install --production",
     "base:prettier": "yarn prettier --ignore-path .gitignore '!coverage'"
   },
   "dependencies": {
