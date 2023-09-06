@@ -1,0 +1,15 @@
+### No params
+GET http://localhost:7071/api/sample
+
+### Route params
+GET http://localhost:7071/api/sample/a
+
+### Query params
+GET http://localhost:7071/api/sample?name=b
+
+### Params on body
+GET http://localhost:7071/api/sample
+
+{
+  "name": "c"
+}

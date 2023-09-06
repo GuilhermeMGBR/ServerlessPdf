@@ -1,0 +1,10 @@
+### Query params
+GET http://localhost:7071/api/urltopdf/?url=http://google.com
+
+### Params on body
+GET http://localhost:7071/api/urltopdf
+Content-Type: application/json
+
+{
+  "url": "http://google.com"
+}

@@ -3,25 +3,23 @@ import {
   hasParamWithValue,
   unwrapValidData,
   zodEmptyString,
-  zodNonEmptyStringWithUpto255LettersNumbersOrSpaces,
 } from '@shared/base.types';
 
-export const VALID_PARAMS_EXAMPLE = {name: 'valid'};
-export const INVALID_PARAMS_EXAMPLE = {name: 'symbol$'};
+export const VALID_PARAMS_EXAMPLE = {url: 'https://github.com'};
+export const INVALID_PARAMS_EXAMPLE = {url: 'not a URL'};
 
 const paramsSchema = z.union([
   z.object({
-    name: zodNonEmptyStringWithUpto255LettersNumbersOrSpaces,
+    url: z.string().trim().min(1).url(),
   }),
   z.object({
-    name: zodEmptyString.optional(),
+    url: zodEmptyString.optional(),
   }),
 ]);
 
 export type UrlToPdfParams = z.infer<typeof paramsSchema>;
 
-export const hasParams = (params?: unknown) =>
-  hasParamWithValue('name', params);
+export const hasParams = (params?: unknown) => hasParamWithValue('url', params);
 
 export const unwrapValidParams = (params: unknown): params is UrlToPdfParams =>
   unwrapValidData(paramsSchema)(params);

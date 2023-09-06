@@ -1,10 +1,11 @@
+import {stringWith254Characters} from '@shared/base.types';
 import {
   hasParams,
   unwrapValidParams,
   VALID_PARAMS_EXAMPLE,
-} from './UrlToPdf.types';
+} from './MessageWithName.types';
 
-describe('UrlToPdf', () => {
+describe('MessageWithName', () => {
   describe('Types', () => {
     describe('hasParams', () => {
       it.each([
@@ -23,16 +24,16 @@ describe('UrlToPdf', () => {
       );
     });
 
-    describe('unwrapInvalidParams', () => {
+    describe('unwrapValidParams', () => {
       it.each([
-        ['invalid', ''],
         ['invalid', null],
         ['invalid', undefined],
-        ['invalid', {url: 'not an url'}],
-        ['valid', {url: ''}],
-        ['valid', {url: 'https://url.dev'}],
-        ['valid', {url: 'https://url.dev?param1=xyz&param2@$#'}],
-      ])('unwraps %s url (%s)', (scenario: string, params: unknown) => {
+        ['invalid', ''],
+        ['invalid', {name: stringWith254Characters + 'abc'}],
+        ['valid', {name: ''}],
+        ['valid', {name: 'Valid Name'}],
+        ['valid', {name: 'John'}],
+      ])('unwraps %s string (%s)', (scenario: string, params: unknown) => {
         const hasInvalidParams = unwrapValidParams(params);
 
         expect(hasInvalidParams).toBe(scenario === 'valid');
