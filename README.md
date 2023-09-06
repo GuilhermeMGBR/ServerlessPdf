@@ -98,7 +98,7 @@ yarn
 - [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens) - Git extensions
 - [Azure Functions](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions) - Official Azure Functions extension
 - [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker) - Spell checker
-- [Thunder Client](https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client) - Lightweight Rest API Client
+- [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) - Lightweight HTTP request client
 
 </details>
 

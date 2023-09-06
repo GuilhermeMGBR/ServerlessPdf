@@ -1,0 +1,15 @@
+### No params
+GET http://localhost:7071/api/urltopdf
+
+### Route params
+GET http://localhost:7071/api/urltopdf/a
+
+### Query params
+GET http://localhost:7071/api/urltopdf?name=b
+
+### Params on body
+GET http://localhost:7071/api/urltopdf
+
+{
+  "name": "c"
+}

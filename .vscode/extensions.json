@@ -8,6 +8,7 @@
     "usernamehw.errorlens",
     "yoavbls.pretty-ts-errors",
     "esbenp.prettier-vscode",
+    "humao.rest-client",
     "eamodio.gitlens"
   ]
 }
