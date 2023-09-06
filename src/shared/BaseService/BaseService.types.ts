@@ -19,13 +19,20 @@ export type ParamValidationResult<TValidParams> =
   | ValidValidationResult<TValidParams>
   | InvalidValidationResult;
 
-export interface IServiceBehavior<TParams> {
+export interface IServiceBehavior<
+  TParams,
+  TValidParams = TParams,
+  TQuery = TParams,
+  TBody = TParams,
+> {
   validateParams: (
-    params: TParams | Invalid<TParams>,
     logger: ILogger,
-  ) => ValidValidationResult<TParams> | InvalidValidationResult;
+    params: TParams | Invalid<TParams>,
+    query: TQuery | Invalid<TQuery>,
+    body?: TBody | Invalid<TBody>,
+  ) => ValidValidationResult<TValidParams> | InvalidValidationResult;
 
-  run: (params: TParams, logger: ILogger) => Promise<HttpResponse>;
+  run: (logger: ILogger, params: TValidParams) => Promise<HttpResponse>;
 }
 
 export const getValidParamsResult = <TParams>(

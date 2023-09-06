@@ -4,22 +4,32 @@ import {
   getOkResponse,
   getRequest,
 } from './http.types';
-import type {HttpRequestParams} from './http.types';
+import type {HttpRequestParams, HttpRequestQuery} from './http.types';
 
 describe('Http.Types', () => {
   describe('Constructors', () => {
-    it('constructs a request with params', () => {
-      const paramsSamples: HttpRequestParams[] = [{}, {value: '10'}];
+    it.each([
+      ['route params', {value: '10'}, {}, {}],
+      ['query params', {}, {value: '10'}, {}],
+      ['body', {}, {}, {value: '10'}],
+      ['undefined body', {}, {}, undefined],
+    ])(
+      'constructs a request with %s',
+      (
+        _scenario: string,
+        params: HttpRequestParams,
+        query: HttpRequestQuery,
+        body: unknown,
+      ) => {
+        const request = getRequest(params, query, body);
 
-      paramsSamples.forEach(params => {
-        const response = getRequest(params);
-
-        expect(response).toStrictEqual({
+        expect(request).toStrictEqual({
           params,
-          query: {},
+          query,
+          body,
         });
-      });
-    });
+      },
+    );
 
     it.each([
       ['Ok', getOkResponse, 200],

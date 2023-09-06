@@ -10,10 +10,27 @@ import type {
 describe('BaseService', () => {
   describe('behaviorWrapper', () => {
     type TestParams = {param1: string};
+    type TestQuery = {query1: string};
+    type TestBody = {body1: string};
+    const invalidParamsHttpResponse = {body: 'params1 is invalid'};
 
     it.each([
-      ['allows', 'valid', true, {param1: 'valid'}],
-      ['blocks', 'invalid', false, {param1: 'invalid'}],
+      [
+        'allows',
+        'valid',
+        true,
+        {param1: 'valid'},
+        {query1: 'valid'},
+        {body1: 'valid'},
+      ],
+      [
+        'blocks',
+        'invalid',
+        false,
+        {param1: 'valid'},
+        {query1: 'invalid'},
+        {body1: 'valid'},
+      ],
     ])(
       '%s behavior execution when unwrapping %s params (%s)',
       async (
@@ -21,16 +38,16 @@ describe('BaseService', () => {
         _description1: string,
         valid: boolean,
         params: TestParams,
+        query: TestQuery,
+        body: TestBody,
       ): Promise<void> => {
-        const invalidParamsHttpResponse = {body: 'params1 is invalid'};
+        const mockLogger = createLoggerMock();
 
         const validationResult: ParamValidationResult<TestParams> = valid
           ? {valid, validParams: params}
           : {valid, invalidParamsHttpResponse};
 
         const runResultWhenValid = {a: 'xyz'};
-
-        const mockLogger = createLoggerMock();
 
         const mockServiceBehavior: IServiceBehavior<TestParams> = {
           validateParams: jest.fn().mockReturnValueOnce(validationResult),
@@ -40,22 +57,23 @@ describe('BaseService', () => {
         const response = await behaviorWrapper<TestParams>(
           mockLogger,
           mockServiceBehavior,
-          getRequest(params),
+          getRequest(params, query, body),
         );
 
         expect(mockServiceBehavior.validateParams).toHaveBeenCalledTimes(1);
         expect(mockServiceBehavior.validateParams).toHaveBeenCalledWith(
-          params,
           mockLogger,
+          params,
+          query,
+          body,
         );
 
         if (valid) {
           expect(mockServiceBehavior.run).toHaveBeenCalledWith(
-            params,
             mockLogger,
+            params,
           );
           expect(mockServiceBehavior.run).toHaveBeenCalledTimes(1);
-
           expect(response).toBe(runResultWhenValid);
           expect(mockLogger.verbose).toHaveBeenCalledTimes(1);
           return;

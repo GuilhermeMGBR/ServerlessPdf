@@ -11,11 +11,18 @@ export type HttpResponse = AzureContext['res'];
 export type HttpRequestParams = AzureHttpRequestParams;
 export type HttpRequestQuery = AzureHttpRequestQuery;
 
-export const getRequest = <TParams extends HttpRequestParams>(
+export const getRequest = <
+  TParams extends HttpRequestParams,
+  TQuery extends HttpRequestQuery = TParams,
+  TBody = TParams,
+>(
   params: TParams,
+  query?: TQuery,
+  body?: TBody,
 ): HttpRequest => ({
   params,
-  query: {},
+  query: query ?? {},
+  body,
 });
 
 export const getBadRequestResponse = (body: unknown): HttpResponse => ({
