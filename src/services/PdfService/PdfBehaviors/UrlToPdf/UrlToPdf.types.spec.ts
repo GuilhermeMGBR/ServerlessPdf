@@ -1,4 +1,4 @@
-import {stringWith254Characters} from '@shared/types';
+import {stringWith254Characters} from '@shared/base.types';
 import {
   hasParams,
   unwrapValidParams,

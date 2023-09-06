@@ -1,13 +1,15 @@
 import {
+  hasParam,
+  hasParamWithValue,
   stringWith254Characters,
   unwrapInvalidData,
   unwrapValidData,
   zodEmptyString,
   zodNonEmptyStringWithUpto255LettersNumbersOrSpaces,
   zodStringWithLettersNumbersOrSpaces,
-} from './types';
+} from './base.types';
 
-describe('Types', () => {
+describe('Base Types', () => {
   describe('zodEmptyString', () => {
     it.each([
       ['valid', ''],
@@ -73,5 +75,37 @@ describe('Types', () => {
 
       expect(allParamsAreValid).toBe(isValid);
     });
+  });
+
+  describe('hasParam', () => {
+    it.each([
+      ['empty object', {}, false],
+      ['null', null, false],
+      ['undefined', undefined, false],
+      ['random prop', {prop: 'a'}, false],
+      ['valid object', {paramName: ''}, true],
+      ['valid object with value', {paramName: 'paramValue'}, true],
+    ])(
+      'checks if the unknown object has params (%s)',
+      (_scenario: string, params: unknown, expectedResult: boolean) => {
+        const result = hasParam('paramName', params);
+
+        expect(result).toBe(expectedResult);
+      },
+    );
+  });
+
+  describe('hasParamWithValue', () => {
+    it.each([
+      ['valid object without value', {paramName: ''}, false],
+      ['valid object with value', {paramName: 'paramValue'}, true],
+    ])(
+      'checks if the unknown object has params (%s)',
+      (_scenario: string, params: unknown, expectedResult: boolean) => {
+        const result = hasParamWithValue('paramName', params);
+
+        expect(result).toBe(expectedResult);
+      },
+    );
   });
 });

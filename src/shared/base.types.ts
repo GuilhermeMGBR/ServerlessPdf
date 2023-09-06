@@ -25,3 +25,17 @@ export const unwrapInvalidData =
   (schema: ZodSchema) =>
   <T>(data: unknown): data is Invalid<T> =>
     !unwrapValidData(schema)(data);
+
+export const hasParam = (
+  paramName: string,
+  params?: unknown,
+): params is {paramName: string} =>
+  typeof params === 'object' && !!params && paramName in params;
+
+export const hasParamWithValue = (
+  paramName: string,
+  params?: unknown,
+): boolean =>
+  hasParam(paramName, params) &&
+  !!params[paramName as keyof typeof params] &&
+  params[paramName as keyof typeof params] !== '';
