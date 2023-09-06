@@ -1,4 +1,14 @@
-export type UrlToPdfParams = {name: string};
+import {z} from 'zod';
+import {
+  unwrapValidData,
+  zodNonEmptyStringWithUpto255LettersNumbersOrSpaces,
+} from '@shared/types';
+
+const paramsSchema = z.object({
+  name: zodNonEmptyStringWithUpto255LettersNumbersOrSpaces,
+});
+
+export type UrlToPdfParams = z.infer<typeof paramsSchema>;
 export const VALID_PARAMS_EXAMPLE = {name: 'valid'};
 
 export const hasParams = (params?: unknown): boolean =>
@@ -8,6 +18,5 @@ export const hasParams = (params?: unknown): boolean =>
   !!params.name &&
   params.name !== '';
 
-// TODO: Add validation
 export const unwrapValidParams = (params: unknown): params is UrlToPdfParams =>
-  true;
+  unwrapValidData(paramsSchema)(params);

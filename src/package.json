@@ -47,7 +47,9 @@
     "pc": "yarn pre-commit",
     "base:prettier": "yarn prettier --ignore-path .gitignore '!coverage'"
   },
-  "dependencies": {},
+  "dependencies": {
+    "zod": "^3.22.2"
+  },
   "devDependencies": {
     "@azure/functions": "^3.0.0",
     "@babel/cli": "^7.22.10",

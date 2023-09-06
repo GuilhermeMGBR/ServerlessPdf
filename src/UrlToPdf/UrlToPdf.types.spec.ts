@@ -1,4 +1,9 @@
-import {VALID_PARAMS_EXAMPLE, hasParams} from './UrlToPdf.types';
+import {stringWith254Characters} from '@shared/types.spec';
+import {
+  VALID_PARAMS_EXAMPLE,
+  hasParams,
+  unwrapValidParams,
+} from './UrlToPdf.types';
 
 describe('UrlToPdf:types', () => {
   describe('hasParams', () => {
@@ -16,5 +21,21 @@ describe('UrlToPdf:types', () => {
         expect(result).toBe(expectedResult);
       },
     );
+  });
+
+  describe('unwrapValidParams', () => {
+    it.each([
+      ['invalid', undefined],
+      ['invalid', null],
+      ['invalid', ''],
+      ['invalid', {name: ''}],
+      ['invalid', {name: stringWith254Characters + 'abc'}],
+      ['valid', {name: 'Valid Name'}],
+      ['valid', {name: 'John'}],
+    ])('unwraps %s string (%s)', (scenario: string, params: unknown) => {
+      const hasInvalidParams = unwrapValidParams(params);
+
+      expect(hasInvalidParams).toBe(scenario === 'valid');
+    });
   });
 });
