@@ -22,7 +22,7 @@
     "watch:test-onlyChanged": "jest --verbose --watch --onlyChanged",
     "coverage": "jest --coverage",
     "sonar": "yarn coverage; yarn sonar:only",
-    "sonar:only": "npx sonarqube-scanner",
+    "sonar:only": "npx --yes sonarqube-scanner",
     "sonar-server:start": "docker run --name sonarqube-server -p 127.0.0.1:9000:9000 --detach --rm sonarqube:lts-community",
     "sonar-server:start-persistent": "docker run --name sonarqube-server -p 127.0.0.1:9000:9000 --detach --rm --env-file ../.env.sonar-server.local sonarqube:lts-community",
     "pre-commit": "yarn type-check && yarn lint && yarn format-check && yarn test",
