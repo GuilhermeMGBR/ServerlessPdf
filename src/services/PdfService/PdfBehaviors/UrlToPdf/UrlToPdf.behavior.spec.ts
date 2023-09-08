@@ -1,7 +1,10 @@
 import {validateParamsFrom} from '@shared/BaseService/BaseService.utils';
 import {createLoggerMock} from '@shared/index';
-import {urlToPdfBehavior} from './UrlToPdf.behavior';
+import {ERROR_PDF_GENERATION, urlToPdfBehavior} from './UrlToPdf.behavior';
 import {INVALID_PARAMS_EXAMPLE, VALID_PARAMS_EXAMPLE} from './UrlToPdf.types';
+import * as utils from './UrlToPdf.utils';
+
+const getPdfSpy = jest.spyOn(utils, 'getPdf');
 
 describe('UrlToPdf', () => {
   describe('Behavior', () => {
@@ -65,25 +68,36 @@ describe('UrlToPdf', () => {
     });
 
     describe('run', () => {
-      it.each([
-        [
-          'Url inside the message',
-          'UrlFromRequest',
-          'Exporting the url to a PDF (UrlFromRequest).',
-        ],
-      ])(
-        'responds with a $s',
-        async (_scenario: string, url: string, body: string) => {
-          const mockLogger = createLoggerMock();
+      it('handles pdf generation errors with logging', async () => {
+        const mockLogger = createLoggerMock();
 
-          const response = await urlToPdfBehavior.run(mockLogger, {url});
+        getPdfSpy.mockImplementationOnce(() => Promise.resolve(undefined));
 
-          expect(response).toStrictEqual({
-            body,
-            status: 200,
-          });
-        },
-      );
+        const response = await urlToPdfBehavior.run(mockLogger, {
+          url: 'https://www.google.com',
+        });
+
+        expect(mockLogger.error).toHaveBeenCalledWith({
+          errorTag: 'urlToPdfBehavior:run:Error',
+          error: ERROR_PDF_GENERATION,
+        });
+        expect(response).toStrictEqual({
+          body: ERROR_PDF_GENERATION,
+          status: 500,
+        });
+      });
+
+      it('[Integration] responds with a Pdf', async () => {
+        const mockLogger = createLoggerMock();
+
+        const response = await urlToPdfBehavior.run(mockLogger, {
+          url: 'https://www.google.com',
+        });
+
+        expect(response).toBeDefined();
+        expect(response?.status).toBe(200);
+        expect(response?.body).toBeDefined();
+      }, 15_000);
     });
   });
 });

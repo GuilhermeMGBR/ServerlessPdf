@@ -1,21 +1,12 @@
 import {z} from 'zod';
-import {
-  hasParamWithValue,
-  unwrapValidData,
-  zodEmptyString,
-} from '@shared/base.types';
+import {hasParamWithValue, unwrapValidData} from '@shared/base.types';
 
 export const VALID_PARAMS_EXAMPLE = {url: 'https://github.com'};
 export const INVALID_PARAMS_EXAMPLE = {url: 'not a URL'};
 
-const paramsSchema = z.union([
-  z.object({
-    url: z.string().trim().min(1).url(),
-  }),
-  z.object({
-    url: zodEmptyString.optional(),
-  }),
-]);
+const paramsSchema = z.object({
+  url: z.string().trim().min(1).url(),
+});
 
 export type UrlToPdfParams = z.infer<typeof paramsSchema>;
 

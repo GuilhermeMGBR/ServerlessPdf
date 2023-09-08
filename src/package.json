@@ -54,6 +54,7 @@
     "base:prettier": "yarn prettier --ignore-path .gitignore '!coverage'"
   },
   "dependencies": {
+    "puppeteer": "^21.1.1",
     "zod": "^3.22.2"
   },
   "devDependencies": {

@@ -2,13 +2,19 @@ import {
   getInvalidParamsResult,
   getValidParamsResult,
 } from '@shared/BaseService/BaseService.types';
-import {getBadRequestResponse, getOkResponse} from '@shared/http.types';
+import {
+  getBadRequestResponse,
+  getInternalServerErrorResponse,
+  getOkResponse,
+} from '@shared/http.types';
 import {hasParams, unwrapValidParams} from './UrlToPdf.types';
+import {getPdf} from './UrlToPdf.utils';
 
 import type {IServiceBehavior} from '@shared/BaseService/BaseService.types';
 import type {UrlToPdfParams} from './UrlToPdf.types';
 
 const INVALID_PARAMS_MESSAGE = 'Invalid params';
+export const ERROR_PDF_GENERATION = 'Unable to generate PDF';
 
 export const urlToPdfBehavior: IServiceBehavior<UrlToPdfParams> = {
   validateParams: (logger, params, query, body) => {
@@ -31,9 +37,20 @@ export const urlToPdfBehavior: IServiceBehavior<UrlToPdfParams> = {
     );
   },
 
-  run: async (_logger, params) => {
-    const responseMessage = `Exporting the url to a PDF (${params.url}).`;
+  run: async (logger, params) => {
+    logger.verbose(`Exporting the url to a PDF (${params.url}).`);
 
-    return getOkResponse(responseMessage);
+    const pdfBuffer = await getPdf(logger, params.url);
+
+    if (!pdfBuffer) {
+      logger.error({
+        errorTag: 'urlToPdfBehavior:run:Error',
+        error: ERROR_PDF_GENERATION,
+      });
+
+      return getInternalServerErrorResponse(ERROR_PDF_GENERATION);
+    }
+
+    return getOkResponse(pdfBuffer);
   },
 };

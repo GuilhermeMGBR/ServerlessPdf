@@ -29,7 +29,7 @@ describe('UrlToPdf', () => {
         ['invalid', null],
         ['invalid', undefined],
         ['invalid', {url: 'not an url'}],
-        ['valid', {url: ''}],
+        ['invalid', {url: ''}],
         ['valid', {url: 'https://url.dev'}],
         ['valid', {url: 'https://url.dev?param1=xyz&param2@$#'}],
       ])('unwraps %s url (%s)', (scenario: string, params: unknown) => {
