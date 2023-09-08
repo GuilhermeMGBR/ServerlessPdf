@@ -2,7 +2,7 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
   "name": "Node.js with Typescript",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:0-18-bullseye",
+  "build": { "dockerfile": "Dockerfile" },
 
   // Features to add to the dev container. More info: https://containers.dev/features.
   "features": {
