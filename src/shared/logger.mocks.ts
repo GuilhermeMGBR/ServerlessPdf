@@ -2,7 +2,7 @@ import type {ILogger} from './logger.types';
 
 export const createLoggerMock = (logOnConsole: boolean = false): ILogger => {
   if (logOnConsole) {
-    return Object.assign((...args: unknown[]) => console.info(args), {
+    return Object.assign((...args: unknown[]) => console.log(args), {
       error: jest.fn().mockImplementation(console.error),
       warn: jest.fn().mockImplementation(console.warn),
       info: jest.fn().mockImplementation(console.info),
