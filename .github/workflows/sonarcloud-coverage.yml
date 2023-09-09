@@ -1,0 +1,32 @@
+name: SonarCloud CI # Sonar analysis with code coverage
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install Yarn
+        run: npm install --global yarn
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: SonarCloud Scan
+        run: |
+          yarn sonar \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.organization=${{ secrets.SONARCLOUD_ORGANIZATION }} \
+            -Dsonar.login=${{ secrets.SONARCLOUD_TOKEN }}
