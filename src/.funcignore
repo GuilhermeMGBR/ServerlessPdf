@@ -8,3 +8,6 @@ getting_started.md
 node_modules/@types/
 node_modules/azure-functions-core-tools/
 node_modules/typescript/
+jest.config.js
+*.spec.js
+*.mocks.js

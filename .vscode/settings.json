@@ -1,10 +1,10 @@
 {
-  "azureFunctions.deploySubpath": "src",
-  "azureFunctions.postDeployTask": "npm install (functions)",
+  "azureFunctions.projectSubpath": "src",
+  "azureFunctions.deploySubpath": "dist",
+  "azureFunctions.preDeployTask": "yarn build (functions)",
   "azureFunctions.projectLanguage": "TypeScript",
   "azureFunctions.projectRuntime": "~4",
   "debug.internalConsoleOptions": "neverOpen",
-  "azureFunctions.preDeployTask": "npm prune (functions)",
   "terminal.integrated.cwd": "${workspaceFolder}/src",
   "terminal.integrated.env.osx": {
     "ZSH_INIT_COMMAND_SVRLSSPDF": "source ../.vscode/dev-environment-init.sh"
