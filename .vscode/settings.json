@@ -41,6 +41,7 @@
     "prestart",
     "sonarlint",
     "sonarqube",
-    "sonarsource"
+    "sonarsource",
+    "sparticuz"
   ]
 }

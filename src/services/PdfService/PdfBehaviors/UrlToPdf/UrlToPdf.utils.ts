@@ -1,18 +1,24 @@
-import {launch} from 'puppeteer';
+import {launch} from 'puppeteer-core';
+import chromium = require('@sparticuz/chromium');
 
 import type {
   PDFOptions,
   PuppeteerLaunchOptions,
   WaitForOptions,
-} from 'puppeteer';
+} from 'puppeteer-core';
 import type {ILogger} from '@shared/logger.types';
 
-const BROWSER_LAUNCH_OPTIONS: PuppeteerLaunchOptions = {headless: 'new'};
+// TODO: evaluate sandbox with Azure Functions
+const getBrowserLaunchOptions = async (): Promise<PuppeteerLaunchOptions> => ({
+  headless: 'new',
+  args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  executablePath: await chromium.executablePath(),
+});
 const DEFAULT_PDF_OPTIONS: PDFOptions = {format: 'A4'};
 const DEFAULT_WAIT_FOR_OPTIONS: WaitForOptions = {waitUntil: 'networkidle2'};
 
 export const getHeadlessBrowser = async () =>
-  await launch(BROWSER_LAUNCH_OPTIONS);
+  await launch(await getBrowserLaunchOptions());
 
 export const getPage = async (logger: ILogger) => {
   const browser = await getHeadlessBrowser();

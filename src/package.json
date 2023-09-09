@@ -54,7 +54,8 @@
     "base:prettier": "yarn prettier --ignore-path .gitignore '!coverage'"
   },
   "dependencies": {
-    "puppeteer": "^21.1.1",
+    "@sparticuz/chromium": "^116.0.0",
+    "puppeteer-core": "^21.1.1",
     "zod": "^3.22.2"
   },
   "devDependencies": {

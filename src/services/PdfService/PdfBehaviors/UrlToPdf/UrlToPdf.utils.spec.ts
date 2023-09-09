@@ -1,9 +1,9 @@
-import {Browser, Page, launch} from 'puppeteer';
+import {Browser, Page, launch} from 'puppeteer-core';
 import {getHeadlessBrowser, getPage, getPdf, openPage} from './UrlToPdf.utils';
 import {createLoggerMock} from '@shared/logger.mocks';
 import {ILogger} from '@shared/logger.types';
 
-jest.mock('puppeteer', () => ({
+jest.mock('puppeteer-core', () => ({
   launch: jest.fn(),
 }));
 
