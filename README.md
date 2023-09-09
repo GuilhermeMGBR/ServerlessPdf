@@ -406,3 +406,9 @@ This project is licensed under the **MIT license**. Feel free to edit and distri
 See [LICENSE](LICENSE) for more information.
 
 <sup><a href="#index" title="Return to index">&UpArrowBar;</a></sup>
+
+<p align="right">
+<a href="https://sonarcloud.io/summary/new_code?id=Serverless-PDF"><img src=
+"https://sonarcloud.io/images/project_badges/sonarcloud-black.svg"
+alt="SonarCloud" /></a>
+</p>
