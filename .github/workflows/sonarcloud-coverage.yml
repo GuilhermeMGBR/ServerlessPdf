@@ -1,5 +1,6 @@
 name: SonarCloud CI # Sonar analysis with code coverage
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
