@@ -6,12 +6,70 @@
 </p>
 
 <p align="center">
+  <a href="https://sonarcloud.io/summary/overall?id=Serverless-PDF">
+    <img
+      src="https://sonarcloud.io/api/project_badges/measure?project=Serverless-PDF&metric=alert_status"
+      alt="Quality gate status"
+    />
+  </a>
+  <a
+    href="https://sonarcloud.io/component_measures?id=Serverless-PDF&metric=reliability_rating&view=list"
+    ><img
+      src="https://sonarcloud.io/api/project_badges/measure?project=Serverless-PDF&metric=reliability_rating"
+      alt="Reliability rating"
+  /></a>
+  <a
+    href="https://sonarcloud.io/project/issues?resolved=false&types=VULNERABILITY&id=Serverless-PDF"
+    ><img
+      src="https://sonarcloud.io/api/project_badges/measure?project=Serverless-PDF&metric=vulnerabilities"
+      alt="Vulnerabilities"
+  /></a>
+  <a
+    href="https://sonarcloud.io/project/issues?resolved=false&types=BUG&id=Serverless-PDF"
+    ><img
+      src="https://sonarcloud.io/api/project_badges/measure?project=Serverless-PDF&metric=bugs"
+      alt="Bugs"
+  /></a>
+  <a
+    href="https://sonarcloud.io/project/issues?resolved=false&types=CODE_SMELL&id=Serverless-PDF"
+    ><img
+      src="https://sonarcloud.io/api/project_badges/measure?project=Serverless-PDF&metric=code_smells"
+      alt="Code smells"
+  /></a>
+  <a
+    href="https://sonarcloud.io/component_measures?id=Serverless-PDF&metric=coverage&view=list"
+    ><img
+      src="https://sonarcloud.io/api/project_badges/measure?project=Serverless-PDF&metric=coverage"
+      alt="Coverage"
+  /></a>
+</p>
+
+<p align="center">
+  <a
+    href="https://github.com/GuilhermeMGBR/ServerlessPdf/actions/workflows/sonarcloud-coverage.yml?query=branch%3Amain"
+  >
+    <img
+      src="https://github.com/GuilhermeMGBR/ServerlessPdf/actions/workflows/sonarcloud-coverage.yml/badge.svg?event=push&branch=main"
+      alt="SonarCloud CI status"
+    />
+  </a>
   <a  href="https://github.com/GuilhermeMGBR?tab=overview">
     <img
       src="https://img.shields.io/badge/created%20by-@guilhermemgbr-4BBAAB.svg"
       alt="Created by Guilherme Garcia"
     />
   </a>
+  <a href="https://github.com/GuilhermeMGBR/ServerlessPdf" rel="nofollow">
+    <img
+      src="https://img.shields.io/github/package-json/v/GuilhermeMGBR/ServerlessPdf?filename=src/package.json&color=red"
+      alt="Version"
+    />
+  </a>
+  <a href="https://opensource.org/licenses/MIT" rel="nofollow"
+    ><img
+      src="https://img.shields.io/github/license/GuilhermeMGBR/ServerlessPdf"
+      alt="License"
+  /></a>
 </p>
 
 ## Index
