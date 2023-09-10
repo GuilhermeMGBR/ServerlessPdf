@@ -1,3 +1,4 @@
+import {platform} from 'os';
 import {launch} from 'puppeteer-core';
 import chromium = require('@sparticuz/chromium');
 
@@ -12,7 +13,10 @@ import type {ILogger} from '@shared/logger.types';
 const getBrowserLaunchOptions = async (): Promise<PuppeteerLaunchOptions> => ({
   headless: 'new',
   args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  executablePath: await chromium.executablePath(),
+  executablePath:
+    platform() !== 'darwin'
+      ? await chromium.executablePath()
+      : '/usr/local/bin/chromium',
 });
 const DEFAULT_PDF_OPTIONS: PDFOptions = {format: 'A4'};
 const DEFAULT_WAIT_FOR_OPTIONS: WaitForOptions = {waitUntil: 'networkidle2'};

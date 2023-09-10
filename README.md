@@ -133,6 +133,16 @@ yarn global add azure-functions-core-tools
 
 => The 'devcontainer' comes with this preinstalled
 
+<details><summary>[macOS only] Install Chromium</summary>
+
+Install chromium with [Homebrew](https://brew.sh)
+
+```bash
+brew install chromium
+```
+=> It will install Chromium on your Application folder while creating a link to `/usr/local/bin/chromium`
+</details>
+
 </details>
 
 <details><summary>Dependencies</summary>
