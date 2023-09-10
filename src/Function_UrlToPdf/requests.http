@@ -1,10 +1,17 @@
+@urlToConvert = https://www.google.com
+
 ### Query params
-GET http://localhost:7071/api/urltopdf/?url=http://google.com
+GET http://localhost:7071/api/urltopdf/?url={{urlToConvert}}
 
 ### Params on body
 GET http://localhost:7071/api/urltopdf
 Content-Type: application/json
 
 {
-  "url": "http://google.com"
+  "url": "{{urlToConvert}}"
 }
+
+### Remote call
+@remoteUrl = {{$processEnv SVRLSSPDF_BASE_URL}}{{$dotenv SVRLSSPDF_BASE_URL}}
+@authenticationCode = {{$processEnv SVRLSSPDF_API_URLTOPDF_CODE}}{{$dotenv SVRLSSPDF_API_URLTOPDF_CODE}}
+GET {{remoteUrl}}/api/UrlToPdf/?url={{urlToConvert}}&&code={{authenticationCode}}

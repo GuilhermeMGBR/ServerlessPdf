@@ -1,15 +1,23 @@
+@name = John Tester
+
 ### No params
 GET http://localhost:7071/api/sample
 
 ### Route params
-GET http://localhost:7071/api/sample/a
+GET http://localhost:7071/api/sample/{{name}}
 
 ### Query params
-GET http://localhost:7071/api/sample?name=b
+GET http://localhost:7071/api/sample?name={{name}}
 
 ### Params on body
 GET http://localhost:7071/api/sample
 
 {
-  "name": "c"
+  "name": "{{name}}"
 }
+
+### Remote call
+@namePlus = {{name}} {{$randomInt 1000 2000}}
+@remoteUrl = {{$processEnv SVRLSSPDF_BASE_URL}}{{$dotenv SVRLSSPDF_BASE_URL}}
+@authenticationCode = {{$processEnv SVRLSSPDF_API_SAMPLE_CODE}}{{$dotenv SVRLSSPDF_API_SAMPLE_CODE}}
+GET {{remoteUrl}}/api/sample/{{namePlus}}?code={{authenticationCode}}
