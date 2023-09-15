@@ -19,7 +19,7 @@ export const behaviorWrapper = async function <
   },
 ): Promise<HttpResponse> {
   try {
-    const validation = behavior.validateParams(
+    const validation = await behavior.validateParams(
       logger,
       req.params,
       req.query,

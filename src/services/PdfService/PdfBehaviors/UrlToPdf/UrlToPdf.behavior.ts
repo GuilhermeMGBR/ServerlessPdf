@@ -17,7 +17,7 @@ const INVALID_PARAMS_MESSAGE = 'Invalid params';
 export const ERROR_PDF_GENERATION = 'Unable to generate PDF';
 
 export const urlToPdfBehavior: IServiceBehavior<UrlToPdfParams> = {
-  validateParams: (logger, params, query, body) => {
+  validateParams: async (logger, params, query, body) => {
     const hasQueryParams = hasParams(query);
     if (hasQueryParams && unwrapValidParams(query)) {
       return getValidParamsResult(query);

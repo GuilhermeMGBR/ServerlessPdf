@@ -14,10 +14,10 @@ describe('UrlToPdf', () => {
         async (paramsOrigin: string): Promise<void> => {
           const mockLogger = createLoggerMock();
 
-          const validation = validateParamsFrom(mockLogger, urlToPdfBehavior)(
-            paramsOrigin,
-            VALID_PARAMS_EXAMPLE,
-          );
+          const validation = await validateParamsFrom(
+            mockLogger,
+            urlToPdfBehavior,
+          )(paramsOrigin, VALID_PARAMS_EXAMPLE);
 
           expect(validation).toStrictEqual({
             valid: true,
@@ -31,10 +31,10 @@ describe('UrlToPdf', () => {
         async (paramsOrigin: string): Promise<void> => {
           const mockLogger = createLoggerMock();
 
-          const validation = validateParamsFrom(mockLogger, urlToPdfBehavior)(
-            paramsOrigin,
-            INVALID_PARAMS_EXAMPLE,
-          );
+          const validation = await validateParamsFrom(
+            mockLogger,
+            urlToPdfBehavior,
+          )(paramsOrigin, INVALID_PARAMS_EXAMPLE);
 
           expect(validation).toStrictEqual({
             valid: false,
@@ -48,7 +48,7 @@ describe('UrlToPdf', () => {
         async (paramsOrigin: string): Promise<void> => {
           const mockLogger = createLoggerMock();
 
-          const validation = urlToPdfBehavior.validateParams(
+          const validation = await urlToPdfBehavior.validateParams(
             mockLogger,
             {},
             paramsOrigin === 'query params'

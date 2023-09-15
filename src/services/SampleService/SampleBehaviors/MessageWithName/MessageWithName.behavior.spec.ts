@@ -19,7 +19,7 @@ describe('MessageWithName', () => {
         async (paramsOrigin: string): Promise<void> => {
           const mockLogger = createLoggerMock();
 
-          const validation = validateParamsFrom(
+          const validation = await validateParamsFrom(
             mockLogger,
             messageWithNameBehavior,
           )(paramsOrigin, VALID_PARAMS_EXAMPLE);
@@ -37,7 +37,7 @@ describe('MessageWithName', () => {
         async (paramsOrigin: string): Promise<void> => {
           const mockLogger = createLoggerMock();
 
-          const validation = validateParamsFrom(
+          const validation = await validateParamsFrom(
             mockLogger,
             messageWithNameBehavior,
           )(paramsOrigin, INVALID_PARAMS_EXAMPLE);
@@ -54,7 +54,7 @@ describe('MessageWithName', () => {
         async (paramsOrigin: string): Promise<void> => {
           const mockLogger = createLoggerMock();
 
-          const validation = messageWithNameBehavior.validateParams(
+          const validation = await messageWithNameBehavior.validateParams(
             mockLogger,
             paramsOrigin === 'route params'
               ? VALID_PARAMS_EXAMPLE

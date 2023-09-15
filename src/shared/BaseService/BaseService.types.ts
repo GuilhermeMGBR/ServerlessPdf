@@ -30,7 +30,7 @@ export interface IServiceBehavior<
     params: TParams | Invalid<TParams>,
     query: TQuery | Invalid<TQuery>,
     body?: TBody | Invalid<TBody>,
-  ) => ValidValidationResult<TValidParams> | InvalidValidationResult;
+  ) => Promise<ValidValidationResult<TValidParams> | InvalidValidationResult>;
 
   run: (logger: ILogger, params: TValidParams) => Promise<HttpResponse>;
 }

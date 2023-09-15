@@ -12,7 +12,7 @@ const INVALID_PARAMS_MESSAGE = 'Invalid params';
 
 export const messageWithNameBehavior: IServiceBehavior<MessageWithNameParams> =
   {
-    validateParams: (logger, params, query, body) => {
+    validateParams: async (logger, params, query, body) => {
       const hasRouteParams = hasParams(params);
       if (hasRouteParams && unwrapValidParams(params)) {
         return getValidParamsResult(params);
