@@ -53,6 +53,14 @@
       alt="SonarCloud CI status"
     />
   </a>
+  <a
+    href="https://github.com/GuilhermeMGBR/ServerlessPdf/actions/workflows/deploy.yml?query=branch%3Amain"
+  >
+    <img
+      src="https://github.com/GuilhermeMGBR/ServerlessPdf/actions/workflows/deploy.yml/badge.svg?event=push&branch=main"
+      alt="Deploy CI status"
+    />
+  </a>
   <a  href="https://github.com/GuilhermeMGBR?tab=overview">
     <img
       src="https://img.shields.io/badge/created%20by-@guilhermemgbr-4BBAAB.svg"
