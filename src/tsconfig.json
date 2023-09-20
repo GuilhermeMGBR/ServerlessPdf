@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es6",
+    "lib": ["ESNext"],
+    "module": "esnext",
+    "target": "esnext",
     "outDir": "../dist",
     "rootDir": ".",
     "baseUrl": ".",
@@ -11,6 +12,17 @@
     "strict": true,
     "paths": {
       "@shared/*": ["shared/*"]
-    }
-  }
+    },
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "allowImportingTsExtensions": true,
+    "downlevelIteration": true,
+    "skipLibCheck": true,
+    "jsx": "preserve",
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "composite": true
+  },
+  "include": ["./**/*", "./tsconfig.json"]
 }
