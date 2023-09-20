@@ -1,6 +1,7 @@
 import {platform} from 'os';
 import {launch} from 'puppeteer-core';
-import chromium = require('@sparticuz/chromium');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const chromium = require('@sparticuz/chromium');
 
 import type {
   PDFOptions,
