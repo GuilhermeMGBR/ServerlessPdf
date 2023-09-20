@@ -46,7 +46,7 @@
     "ss": "yarn sonar-server:start",
     "ssp": "yarn sonar-server:start-persistent",
     "pc": "yarn pre-commit",
-    "dist:copy-function-files": "yarn dist:copy-function.json; cp host.json .funcignore package.json yarn.lock local.settings.json ../dist;",
+    "dist:copy-function-files": "yarn dist:copy-function.json; cp host.json .funcignore package.json yarn.lock ../dist; cp local.settings.json ../dist || true;",
     "dist:copy-function.json": "find . -maxdepth 2 -name '*function.json' | xargs -I {} cp {} ../dist/{};",
     "dist:install-modules": "cd ../dist; yarn install --production",
     "dist:clear": "yarn clear-path ../dist",
