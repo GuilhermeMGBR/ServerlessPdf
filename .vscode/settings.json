@@ -42,6 +42,7 @@
     "sonarlint",
     "sonarqube",
     "sonarsource",
-    "sparticuz"
+    "sparticuz",
+    "wtao"
   ]
 }

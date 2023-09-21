@@ -87,17 +87,21 @@ describe('UrlToPdf', () => {
         });
       });
 
-      it('[Integration] responds with a Pdf', async () => {
-        const mockLogger = createLoggerMock();
+      (process.env.INCLUDE_INTEGRATION_TESTS === 'true' ? it : it.skip)(
+        '[Integration] responds with a Pdf',
+        async () => {
+          const mockLogger = createLoggerMock();
 
-        const response = await urlToPdfBehavior.run(mockLogger, {
-          url: 'https://www.google.com',
-        });
+          const response = await urlToPdfBehavior.run(mockLogger, {
+            url: 'https://www.google.com',
+          });
 
-        expect(response).toBeDefined();
-        expect(response?.status).toBe(200);
-        expect(response?.body).toBeDefined();
-      }, 15_000);
+          expect(response).toBeDefined();
+          expect(response?.status).toBe(200);
+          expect(response?.body).toBeDefined();
+        },
+        15_000,
+      );
     });
   });
 });

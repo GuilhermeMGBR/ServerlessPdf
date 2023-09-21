@@ -296,7 +296,7 @@ yarn wtc
 
 Make sure to have installed dependencies from the initial setup
 
-### Build and run tests:
+<details><summary>Run tests, skipping integration tests</summary>
 
 ```bash
 yarn test
@@ -311,6 +311,24 @@ yarn watch:test
 OR
 yarn wt
 ```
+</details>
+
+<details><summary>Run all tests (including integration tests)</summary>
+
+```bash
+yarn test:all
+OR
+yarn ta
+```
+
+- The test can re-run after each file save in watch mode
+
+```bash
+yarn watch:test:all
+OR
+yarn wta
+```
+</details>
 
 </details>
 
