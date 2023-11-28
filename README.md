@@ -384,7 +384,7 @@ Set environment variables with sonar server connection details:
 > They can be set inline, before the run command:
 >
 > ```bash
-> SVRLSSPDF_SONARQUBE_LOCAL_HOSTURL=https://your.local.url; SVRLSSPDF_SONARQUBE_LOCAL_LOGIN=sqp_yourtokenXYZ; yarn sonar
+> SVRLSSPDF_SONARQUBE_LOCAL_HOSTURL=https://your.local.url; SVRLSSPDF_SONARQUBE_LOCAL_LOGIN=sqp_yourTokenXYZ; yarn sonar
 > ```
 
 ### Run Sonar Scanner

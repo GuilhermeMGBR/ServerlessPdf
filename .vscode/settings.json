@@ -30,8 +30,12 @@
     "azuretools",
     "devcontainer",
     "devcontainers",
+    "Dsonar",
+    "errorlens",
     "funcignore",
+    "FUNCTIONAPP",
     "Guilherme",
+    "HOSTURL",
     "jdbc",
     "maxdepth",
     "MGBR",
@@ -39,10 +43,12 @@
     "Parens",
     "postbuild",
     "prestart",
+    "sonarcloud",
     "sonarlint",
     "sonarqube",
     "sonarsource",
     "sparticuz",
+    "SVRLSSPDF",
     "wtao"
   ]
 }
