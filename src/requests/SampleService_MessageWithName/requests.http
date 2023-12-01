@@ -9,10 +9,11 @@ GET {{localUrl}}/{{endpoint}}
 GET {{localUrl}}/{{endpoint}}/{{testName}} Route
 
 ### Query params
-GET http://localhost:7071/api/sample?name={{testName}} Query
+GET {{localUrl}}/{{endpoint}}?name={{testName}} Query
 
 ### Params on body
 POST {{localUrl}}/{{endpoint}}
+Content-Type: application/json
 
 {
   "name": "{{testName}} Body"
