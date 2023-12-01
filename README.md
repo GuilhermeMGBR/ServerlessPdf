@@ -141,14 +141,23 @@ yarn global add azure-functions-core-tools
 
 => The 'devcontainer' comes with this preinstalled
 
-<details><summary>[macOS only] Install Chromium</summary>
+<details><summary>[macOS only] Install and configure Chromium</summary>
 
 Install chromium with [Homebrew](https://brew.sh)
 
 ```bash
-brew install chromium
+brew install chromium --no-quarantine
 ```
-=> It will install Chromium on your Application folder while creating a link to `/usr/local/bin/chromium`
+
+=> It will install Chromium on your Application folder
+
+Add these configuration lines to your local environment (ex.: `.bashrc` and/or `.zshrc`):
+
+```bash
+export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+export PUPPETEER_EXECUTABLE_PATH=`which chromium`
+```
+
 </details>
 
 </details>
@@ -311,6 +320,7 @@ yarn watch:test
 OR
 yarn wt
 ```
+
 </details>
 
 <details><summary>Run all tests (including integration tests)</summary>
@@ -328,6 +338,7 @@ yarn watch:test:all
 OR
 yarn wta
 ```
+
 </details>
 
 </details>

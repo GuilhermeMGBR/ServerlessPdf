@@ -10,14 +10,18 @@ import type {
 } from 'puppeteer-core';
 import type {ILogger} from '@shared/logger.types';
 
+const getPuppeteerExecutablePath = async () => {
+  if (platform() !== 'darwin') {
+    return await chromium.executablePath();
+  }
+  return process.env.PUPPETEER_EXECUTABLE_PATH ?? '/usr/local/bin/chromium';
+};
+
 // TODO: evaluate sandbox with Azure Functions
 const getBrowserLaunchOptions = async (): Promise<PuppeteerLaunchOptions> => ({
   headless: 'new',
   args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  executablePath:
-    platform() !== 'darwin'
-      ? await chromium.executablePath()
-      : '/usr/local/bin/chromium',
+  executablePath: await getPuppeteerExecutablePath(),
 });
 const DEFAULT_PDF_OPTIONS: PDFOptions = {format: 'A4'};
 const DEFAULT_WAIT_FOR_OPTIONS: WaitForOptions = {waitUntil: 'networkidle2'};
