@@ -50,5 +50,7 @@
     "sparticuz",
     "SVRLSSPDF",
     "wtao"
-  ]
+  ],
+  "jest.rootPath": "src",
+  "jest.autoRun": "off"
 }
