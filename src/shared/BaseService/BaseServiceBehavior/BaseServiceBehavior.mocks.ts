@@ -6,7 +6,7 @@ interface CreateServiceBehaviorMockProps<TParams> {
 }
 
 export const createServiceBehaviorMock = <TParams>({
-  mockValidateRequest: mockValidateRequest,
+  mockValidateRequest,
   mockRun,
 }: CreateServiceBehaviorMockProps<TParams>): IServiceBehavior<TParams> => ({
   validateRequest: mockValidateRequest,
