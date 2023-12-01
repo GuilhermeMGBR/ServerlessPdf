@@ -34,7 +34,7 @@ describe('UrlToPdf', () => {
     ) => {
       expect(mockPage.close).toHaveBeenCalledTimes(1);
       expect(mockBrowser.close).toHaveBeenCalledTimes(browserCloseTimes);
-      expect(mockLogger.verbose).toHaveBeenCalledTimes(2 * browserCloseTimes);
+      expect(mockLogger.trace).toHaveBeenCalledTimes(2 * browserCloseTimes);
     };
 
     const expectGetPdfError = (

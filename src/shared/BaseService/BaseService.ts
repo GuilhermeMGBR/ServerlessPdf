@@ -1,40 +1,23 @@
-import {hasInvalidParams} from './BaseService.types';
+import {isInvalidRequest} from './BaseService.types';
 
-import type {IServiceBehavior, Invalid} from './BaseService.types';
+import type {IServiceBehavior} from './BaseServiceBehavior/BaseServiceBehavior.types';
 import type {HttpRequest, HttpResponse} from '@shared/http.types';
 import type {ILogger} from '@shared/logger.types';
 
-export const behaviorWrapper = async function <
-  TParams,
-  TValidParams = TParams,
-  TQuery = TParams,
-  TBody = TParams,
->(
-  logger: ILogger,
-  behavior: IServiceBehavior<TParams, TValidParams, TQuery, TBody>,
-  req: HttpRequest & {
-    params: TParams | Invalid<TParams>;
-    query: TQuery | Invalid<TQuery>;
-    body?: TBody | Invalid<TBody>;
-  },
-): Promise<HttpResponse> {
-  try {
-    const validation = await behavior.validateParams(
-      logger,
-      req.params,
-      req.query,
-      req.body,
-    );
+export const behaviorWrapper = <TParams>(behavior: IServiceBehavior<TParams>) =>
+  async function (req: HttpRequest, logger: ILogger): Promise<HttpResponse> {
+    try {
+      const validation = await behavior.validateRequest(req, logger);
 
-    if (hasInvalidParams(validation)) {
-      return validation.invalidParamsHttpResponse;
+      if (isInvalidRequest(validation)) {
+        return validation.invalidRequestHttpResponse;
+      }
+
+      return await behavior.run(validation.validParams, logger);
+    } catch (err) {
+      logger.error(err);
+      throw err;
+    } finally {
+      logger.log('HTTP trigger function processed a request.');
     }
-
-    return await behavior.run(logger, validation.validParams);
-  } catch (err) {
-    logger.error(err);
-    throw err;
-  } finally {
-    logger.verbose('HTTP trigger function processed a request.');
-  }
-};
+  };

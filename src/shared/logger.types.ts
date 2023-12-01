@@ -1,3 +1,6 @@
-import type {Logger as AzureLogger} from '@azure/functions';
+import type {InvocationContext as AzureContext} from '@azure/functions';
 
-export type ILogger = AzureLogger;
+export type ILogger = Pick<
+  AzureContext,
+  'log' | 'trace' | 'debug' | 'error' | 'info' | 'warn'
+>;

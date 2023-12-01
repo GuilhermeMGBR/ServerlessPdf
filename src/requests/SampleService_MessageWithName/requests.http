@@ -1,0 +1,27 @@
+@localUrl = http://localhost:7071
+@endpoint = api/sample
+@testName = John Tester
+
+### No params
+GET {{localUrl}}/{{endpoint}}
+
+### Route params
+GET {{localUrl}}/{{endpoint}}/{{testName}} Route
+
+### Query params
+GET http://localhost:7071/api/sample?name={{testName}} Query
+
+### Params on body
+POST {{localUrl}}/{{endpoint}}
+
+{
+  "name": "{{testName}} Body"
+}
+
+### Remote call
+### Prepare this call by adding 'SVRLSSPDF_REMOTE_URL' and 'SVRLSSPDF_API_SAMPLE_CODE' values to a local .env file
+@testNamePlusRandom = {{testName}} {{$randomInt 1000 2000}}
+@remoteUrl = {{$processEnv SVRLSSPDF_REMOTE_URL}}{{$dotenv SVRLSSPDF_REMOTE_URL}}
+@authenticationCode = {{$processEnv SVRLSSPDF_API_SAMPLE_CODE}}{{$dotenv SVRLSSPDF_API_SAMPLE_CODE}}
+
+GET {{remoteUrl}}/{{endpoint}}/{{testNamePlusRandom}}?code={{authenticationCode}}

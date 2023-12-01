@@ -1,125 +1,103 @@
-import {getRequest} from '@shared/http.types';
 import {createLoggerMock} from '@shared/logger.mocks';
+import {getTestRequest} from '@shared/test.utils';
 import {behaviorWrapper} from './BaseService';
+import {createServiceBehaviorMock} from './BaseServiceBehavior/BaseServiceBehavior.mocks';
 
-import type {
-  IServiceBehavior,
-  ParamValidationResult,
-} from './BaseService.types';
+import type {RequestValidationResult} from './BaseService.types';
 
-describe('BaseService', () => {
-  describe('behaviorWrapper', () => {
-    type TestParams = {param1: string};
-    type TestQuery = {query1: string};
-    type TestBody = {body1: string};
-    const invalidParamsHttpResponse = {body: 'params1 is invalid'};
+type TestParams = {param1: string};
 
-    it.each([
-      [
-        'allows',
-        'valid',
-        true,
-        {param1: 'valid'},
-        {query1: 'valid'},
-        {body1: 'valid'},
-      ],
-      [
-        'blocks',
-        'invalid',
-        false,
-        {param1: 'valid'},
-        {query1: 'invalid'},
-        {body1: 'valid'},
-      ],
-    ])(
-      '%s behavior execution when unwrapping %s params (%s)',
-      async (
-        _description0: string,
-        _description1: string,
-        valid: boolean,
-        params: TestParams,
-        query: TestQuery,
-        body: TestBody,
-      ): Promise<void> => {
-        const mockLogger = createLoggerMock();
+describe('behaviorWrapper', () => {
+  it.each([
+    ['allows', 'valid', true, {param1: 'valid'}],
+    ['blocks', 'invalid', false, {param1: 'invalid'}],
+  ])(
+    '%s behavior execution when unwrapping %s params (%s)',
+    async (
+      _description0: string,
+      _description1: string,
+      valid: boolean,
+      routeParams: TestParams,
+    ) => {
+      const invalidRequestHttpResponse = {body: 'params1 is invalid'};
 
-        const validationResult: ParamValidationResult<TestParams> = valid
-          ? {valid, validParams: params}
-          : {valid, invalidParamsHttpResponse};
+      const validationResult: RequestValidationResult<TestParams> = valid
+        ? {valid, validParams: routeParams}
+        : {valid, invalidRequestHttpResponse: invalidRequestHttpResponse};
 
-        const runResultWhenValid = {a: 'xyz'};
+      const runResultWhenValid = {a: 'xyz'};
 
-        const mockServiceBehavior: IServiceBehavior<TestParams> = {
-          validateParams: jest.fn().mockReturnValueOnce(validationResult),
-          run: jest.fn().mockReturnValueOnce(runResultWhenValid),
-        };
+      const mockServiceBehavior = createServiceBehaviorMock<
+        Required<TestParams>
+      >({
+        mockValidateRequest: jest.fn().mockReturnValueOnce(validationResult),
+        mockRun: jest.fn().mockReturnValueOnce(runResultWhenValid),
+      });
 
-        const response = await behaviorWrapper<TestParams>(
+      const mockLogger = createLoggerMock();
+
+      const request = getTestRequest({routeParams});
+
+      const response = await behaviorWrapper(mockServiceBehavior)(
+        request,
+        mockLogger,
+      );
+
+      expect(mockServiceBehavior.validateRequest).toHaveBeenCalledTimes(1);
+      expect(mockServiceBehavior.validateRequest).toHaveBeenCalledWith(
+        request,
+        mockLogger,
+      );
+
+      if (valid) {
+        expect(mockServiceBehavior.run).toHaveBeenCalledWith(
+          routeParams,
           mockLogger,
-          mockServiceBehavior,
-          getRequest(params, query, body),
         );
+        expect(mockServiceBehavior.run).toHaveBeenCalledTimes(1);
 
-        expect(mockServiceBehavior.validateParams).toHaveBeenCalledTimes(1);
-        expect(mockServiceBehavior.validateParams).toHaveBeenCalledWith(
-          mockLogger,
-          params,
-          query,
-          body,
-        );
+        expect(response).toBe(runResultWhenValid);
+        expect(mockLogger.log).toHaveBeenCalledTimes(1);
+        return;
+      }
 
-        if (valid) {
-          expect(mockServiceBehavior.run).toHaveBeenCalledWith(
-            mockLogger,
-            params,
-          );
-          expect(mockServiceBehavior.run).toHaveBeenCalledTimes(1);
-          expect(response).toBe(runResultWhenValid);
-          expect(mockLogger.verbose).toHaveBeenCalledTimes(1);
-          return;
-        }
+      expect(mockServiceBehavior.run).not.toHaveBeenCalled();
 
-        expect(mockServiceBehavior.run).not.toHaveBeenCalled();
+      expect(response).toBe(invalidRequestHttpResponse);
+      expect(mockLogger.log).toHaveBeenCalledTimes(1);
+    },
+  );
 
-        expect(response).toBe(invalidParamsHttpResponse);
-        expect(mockLogger.verbose).toHaveBeenCalledTimes(1);
-      },
-    );
+  it.each([
+    ['validateRequest', true],
+    ['run', false],
+  ])(
+    'logs behavior errors (%s)',
+    async (_description: string, errorOnValidation: boolean) => {
+      const mockLogger = createLoggerMock();
+      const routeParams = {};
 
-    it.each([
-      ['validateParams', true],
-      ['run', false],
-    ])(
-      'logs behavior errors (%s)',
-      async (
-        _description: string,
-        errorOnValidation: boolean,
-      ): Promise<void> => {
-        const mockLogger = createLoggerMock();
-        const params = {};
+      const validateRequestError = new Error('validateRequest Error');
+      const runError = new Error('run Error');
+      const expectedError = errorOnValidation ? validateRequestError : runError;
 
-        const validateParamsError = new Error('validateParams Error');
-        const runError = new Error('run Error');
-        const expectedError = errorOnValidation
-          ? validateParamsError
-          : runError;
+      const mockServiceBehavior = createServiceBehaviorMock({
+        mockValidateRequest: jest.fn().mockImplementationOnce(() => {
+          if (errorOnValidation) throw validateRequestError;
+          return {valid: true, validParams: {result: 'runResultWhenValid'}};
+        }),
+        mockRun: jest.fn().mockImplementationOnce(async () => {
+          throw runError;
+        }),
+      });
 
-        const mockServiceBehavior: IServiceBehavior<object> = {
-          validateParams: jest.fn().mockImplementationOnce(() => {
-            if (errorOnValidation) throw validateParamsError;
-            return {valid: true, validParams: {result: 'runResultWhenValid'}};
-          }),
-          run: jest.fn().mockImplementationOnce(async () => {
-            throw runError;
-          }),
-        };
+      const request = getTestRequest({routeParams});
 
-        await expect(
-          behaviorWrapper(mockLogger, mockServiceBehavior, getRequest(params)),
-        ).rejects.toThrow(expectedError);
+      await expect(
+        behaviorWrapper(mockServiceBehavior)(request, mockLogger),
+      ).rejects.toThrow(expectedError);
 
-        expect(mockLogger.error).toHaveBeenCalledWith(expectedError);
-      },
-    );
-  });
+      expect(mockLogger.error).toHaveBeenCalledWith(expectedError);
+    },
+  );
 });

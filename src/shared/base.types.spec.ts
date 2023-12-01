@@ -2,7 +2,6 @@ import {
   hasParam,
   hasParamWithValue,
   stringWith254Characters,
-  unwrapInvalidData,
   unwrapValidData,
   zodEmptyString,
   zodNonEmptyStringWithUpto255LettersNumbersOrSpaces,
@@ -37,11 +36,11 @@ describe('Base Types', () => {
     it.each(['string#', '_string', 'string:', ';string', 'string@'])(
       'unwraps %p as invalid string',
       (params: unknown) => {
-        const hasInvalidParams = unwrapInvalidData(
+        const hasValidParams = unwrapValidData(
           zodStringWithLettersNumbersOrSpaces,
         )(params);
 
-        expect(hasInvalidParams).toBe(true);
+        expect(hasValidParams).toBe(false);
       },
     );
   });

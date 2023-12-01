@@ -31,7 +31,7 @@ export const getPage = async (logger: ILogger) => {
   const page = await browser.newPage();
 
   const cleanup = async () => {
-    logger.verbose('Page cleanup start');
+    logger.trace('Page cleanup start');
 
     if (!page.isClosed()) {
       await page.close();
@@ -39,7 +39,7 @@ export const getPage = async (logger: ILogger) => {
 
     await browser.close();
 
-    logger.verbose('Page cleanup end');
+    logger.trace('Page cleanup end');
   };
 
   return {page, cleanup};

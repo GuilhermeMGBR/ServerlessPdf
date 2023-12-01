@@ -1,56 +1,37 @@
-import {HttpResponse} from '@shared/http.types';
-import {ILogger} from '@shared/logger.types';
+import type {DefinedBody, HttpResponse} from '@shared/http.types';
 
-export type Invalid<T> = Partial<T>;
+export type HttpResponseWithBody = HttpResponse & {body: DefinedBody};
 
 export type ValidValidationResult<TParams> = {
   valid: true;
   validParams: TParams;
 };
 
-type InvalidParamsHttpResponse = Required<HttpResponse>;
-
 export type InvalidValidationResult = {
   valid: false;
-  invalidParamsHttpResponse: InvalidParamsHttpResponse;
+  invalidRequestHttpResponse: HttpResponseWithBody;
 };
 
-export type ParamValidationResult<TValidParams> =
+export type RequestValidationResult<TValidParams> =
   | ValidValidationResult<TValidParams>
   | InvalidValidationResult;
 
-export interface IServiceBehavior<
-  TParams,
-  TValidParams = TParams,
-  TQuery = TParams,
-  TBody = TParams,
-> {
-  validateParams: (
-    logger: ILogger,
-    params: TParams | Invalid<TParams>,
-    query: TQuery | Invalid<TQuery>,
-    body?: TBody | Invalid<TBody>,
-  ) => Promise<ValidValidationResult<TValidParams> | InvalidValidationResult>;
-
-  run: (logger: ILogger, params: TValidParams) => Promise<HttpResponse>;
-}
-
-export const getValidParamsResult = <TParams>(
+export const getValidRequestResult = <TParams>(
   validParams: TParams,
 ): ValidValidationResult<TParams> => ({
   valid: true,
   validParams,
 });
 
-export const getInvalidParamsResult = (
-  httpResponse: InvalidParamsHttpResponse,
+export const getInvalidRequestResult = (
+  httpResponse: HttpResponseWithBody,
 ): InvalidValidationResult => ({
   valid: false,
-  invalidParamsHttpResponse: httpResponse,
+  invalidRequestHttpResponse: httpResponse,
 });
 
-export const hasInvalidParams = <TValid>(
-  validation: ParamValidationResult<TValid>,
+export const isInvalidRequest = <TValid>(
+  validation: RequestValidationResult<TValid>,
 ): validation is InvalidValidationResult => {
   return !validation.valid;
 };

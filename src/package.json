@@ -2,6 +2,7 @@
   "name": "serverless-pdf",
   "version": "1.0.0",
   "description": "",
+  "main": "./app.js",
   "license": "MIT",
   "scripts": {
     "prepare": "cd .. && husky install",
@@ -60,12 +61,12 @@
     "base:prettier": "yarn prettier --ignore-path .gitignore '!coverage'"
   },
   "dependencies": {
+    "@azure/functions": "^4.1.0",
     "@sparticuz/chromium": "^117.0.0",
     "puppeteer-core": "^21.3.1",
     "zod": "^3.22.2"
   },
   "devDependencies": {
-    "@azure/functions": "^3.0.0",
     "@babel/cli": "^7.22.10",
     "@babel/core": "^7.22.20",
     "@babel/preset-env": "^7.22.20",

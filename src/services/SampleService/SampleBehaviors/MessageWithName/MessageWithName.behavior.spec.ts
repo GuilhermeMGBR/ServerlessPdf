@@ -1,28 +1,42 @@
-import {validateParamsFrom} from '@shared/BaseService/BaseService.utils';
 import {createLoggerMock} from '@shared/index';
-import {messageWithNameBehavior} from './MessageWithName.behavior';
+import {
+  getTestRequest,
+  getTestRequestWithBodyParams,
+  getTestRequestWithRouteParams,
+  getTestRequestWithSearchParams,
+  getURLSearchParamsFromObject,
+} from '@shared/test.utils';
+import {
+  messageWithNameBehavior,
+  NO_NAME_MESSAGE,
+} from './MessageWithName.behavior';
 import {
   INVALID_PARAMS_EXAMPLE,
   VALID_PARAMS_EXAMPLE,
 } from './MessageWithName.types';
 
+import type {HttpRequest} from '@shared/index';
+
 describe('MessageWithName', () => {
   describe('Behavior', () => {
-    describe('validateParams', () => {
+    describe('validateRequest', () => {
       it.each([
-        'route params',
-        'query params',
-        'params from body',
-        'empty params',
+        ['route params', getTestRequestWithRouteParams(VALID_PARAMS_EXAMPLE)],
+        ['query params', getTestRequestWithSearchParams(VALID_PARAMS_EXAMPLE)],
+        [
+          'params from body',
+          getTestRequestWithBodyParams(VALID_PARAMS_EXAMPLE),
+        ],
+        ['empty params', getTestRequest({})],
       ])(
         'validates and allows %s',
-        async (paramsOrigin: string): Promise<void> => {
+        async (paramsOrigin: string, request: HttpRequest) => {
           const mockLogger = createLoggerMock();
 
-          const validation = await validateParamsFrom(
+          const validation = await messageWithNameBehavior.validateRequest(
+            request,
             mockLogger,
-            messageWithNameBehavior,
-          )(paramsOrigin, VALID_PARAMS_EXAMPLE);
+          );
 
           expect(validation).toStrictEqual({
             valid: true,
@@ -32,39 +46,51 @@ describe('MessageWithName', () => {
         },
       );
 
-      it.each(['route params', 'query params', 'params from body'])(
+      it.each([
+        ['route', getTestRequestWithRouteParams(INVALID_PARAMS_EXAMPLE)],
+        ['query', getTestRequestWithSearchParams(INVALID_PARAMS_EXAMPLE)],
+        ['body', getTestRequestWithBodyParams(INVALID_PARAMS_EXAMPLE)],
+      ])(
         'rejects requests with invalid params on non empty sources (%s)',
-        async (paramsOrigin: string): Promise<void> => {
+        async (_paramsOrigin: string, request: HttpRequest) => {
           const mockLogger = createLoggerMock();
 
-          const validation = await validateParamsFrom(
+          const validation = await messageWithNameBehavior.validateRequest(
+            request,
             mockLogger,
-            messageWithNameBehavior,
-          )(paramsOrigin, INVALID_PARAMS_EXAMPLE);
+          );
 
           expect(validation).toStrictEqual({
             valid: false,
-            invalidParamsHttpResponse: {body: 'Invalid params', status: 400},
+            invalidRequestHttpResponse: {body: 'Invalid params', status: 400},
           });
         },
       );
 
-      it.each(['route params', 'query params', 'params from body'])(
-        'accepts requests with valid params from at least one source',
-        async (paramsOrigin: string): Promise<void> => {
+      it.each([['route'], ['query'], ['body']])(
+        'accepts requests with valid params from at least one source (%s)',
+        async (paramsOrigin: string) => {
           const mockLogger = createLoggerMock();
 
-          const validation = await messageWithNameBehavior.validateParams(
+          const request = getTestRequest({
+            routeParams:
+              paramsOrigin == 'route'
+                ? VALID_PARAMS_EXAMPLE
+                : INVALID_PARAMS_EXAMPLE,
+            uRLSearchParams: getURLSearchParamsFromObject(
+              paramsOrigin == 'query'
+                ? VALID_PARAMS_EXAMPLE
+                : INVALID_PARAMS_EXAMPLE,
+            ),
+            bodyJson:
+              paramsOrigin == 'body'
+                ? VALID_PARAMS_EXAMPLE
+                : INVALID_PARAMS_EXAMPLE,
+          });
+
+          const validation = await messageWithNameBehavior.validateRequest(
+            request,
             mockLogger,
-            paramsOrigin === 'route params'
-              ? VALID_PARAMS_EXAMPLE
-              : INVALID_PARAMS_EXAMPLE,
-            paramsOrigin === 'query params'
-              ? VALID_PARAMS_EXAMPLE
-              : INVALID_PARAMS_EXAMPLE,
-            paramsOrigin === 'params from body'
-              ? VALID_PARAMS_EXAMPLE
-              : INVALID_PARAMS_EXAMPLE,
           );
 
           expect(validation).toStrictEqual({
@@ -77,11 +103,7 @@ describe('MessageWithName', () => {
 
     describe('run', () => {
       it.each([
-        [
-          'message',
-          '',
-          'This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.',
-        ],
+        ['message', '', NO_NAME_MESSAGE],
         [
           'name inside the message',
           'NameFromRequest',
@@ -92,9 +114,10 @@ describe('MessageWithName', () => {
         async (_scenario: string, name: string, body: string) => {
           const mockLogger = createLoggerMock();
 
-          const response = await messageWithNameBehavior.run(mockLogger, {
-            name,
-          });
+          const response = await messageWithNameBehavior.run(
+            {name},
+            mockLogger,
+          );
 
           expect(response).toStrictEqual({
             body,

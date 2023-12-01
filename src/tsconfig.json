@@ -11,6 +11,8 @@
     "sourceMap": true,
     "strict": true,
     "paths": {
+      "@PdfService/*": ["services/PdfService/*"],
+      "@SampleService/*": ["services/SampleService/*"],
       "@shared/*": ["shared/*"]
     },
     "moduleResolution": "bundler",

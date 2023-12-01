@@ -1,5 +1,4 @@
 import {z, ZodSchema} from 'zod';
-import type {Invalid} from './BaseService/BaseService.types';
 
 export const stringWith254Characters =
   'LoremipsumdolorsitametconsectetueradipiscingelitAeneancommodoligulaegetdolorAeneanmassaCumsociisnatoquepenatibusetmagnisdisparturientmontesnasceturridiculusmusDonecquamfelisultriciesnecpellentesqueeupretiumquissemNullaconsequatmasjshdueoldhadwiurfmfkvius';
@@ -20,11 +19,6 @@ export const unwrapValidData =
   (schema: ZodSchema) =>
   <T>(data: unknown): data is T =>
     schema.safeParse(data).success;
-
-export const unwrapInvalidData =
-  (schema: ZodSchema) =>
-  <T>(data: unknown): data is Invalid<T> =>
-    !unwrapValidData(schema)(data);
 
 export const hasParam = (
   paramName: string,

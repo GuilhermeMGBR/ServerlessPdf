@@ -1,44 +1,54 @@
 import {
-  getInvalidParamsResult,
-  getValidParamsResult,
+  getInvalidRequestResult,
+  getValidRequestResult,
 } from '@shared/BaseService/BaseService.types';
 import {
   getBadRequestResponse,
+  getBodyAsJson,
   getInternalServerErrorResponse,
   getOkResponse,
+  getQueryAsJson,
 } from '@shared/http.types';
 import {hasParams, unwrapValidParams} from './UrlToPdf.types';
 import {getPdf} from './UrlToPdf.utils';
 
-import type {IServiceBehavior} from '@shared/BaseService/BaseService.types';
+import type {IServiceBehavior} from '@shared/BaseService/BaseServiceBehavior/BaseServiceBehavior.types';
 import type {UrlToPdfParams} from './UrlToPdf.types';
 
 const INVALID_PARAMS_MESSAGE = 'Invalid params';
 export const ERROR_PDF_GENERATION = 'Unable to generate PDF';
 
 export const urlToPdfBehavior: IServiceBehavior<UrlToPdfParams> = {
-  validateParams: async (logger, params, query, body) => {
+  validateRequest: async (request, logger) => {
+    const query = getQueryAsJson(request, 'url');
+
     const hasQueryParams = hasParams(query);
     if (hasQueryParams && unwrapValidParams(query)) {
-      return getValidParamsResult(query);
+      return getValidRequestResult(query);
     }
+
+    const body = await getBodyAsJson(request);
 
     const hasBodyParams = hasParams(body);
     if (hasBodyParams && unwrapValidParams(body)) {
-      return getValidParamsResult(body);
+      return getValidRequestResult(body);
     }
 
     logger.warn(
-      `${INVALID_PARAMS_MESSAGE}: ${JSON.stringify({params, query, body})}`,
+      `${INVALID_PARAMS_MESSAGE}: ${JSON.stringify({
+        params: request.params,
+        query,
+        body,
+      })}`,
     );
 
-    return getInvalidParamsResult(
+    return getInvalidRequestResult(
       getBadRequestResponse(INVALID_PARAMS_MESSAGE),
     );
   },
 
-  run: async (logger, params) => {
-    logger.verbose(`Exporting the url to a PDF (${params.url}).`);
+  run: async (params, logger) => {
+    logger.trace(`Exporting the url to a PDF (${params.url}).`);
 
     const pdfBuffer = await getPdf(logger, params.url);
 
