@@ -1,0 +1,24 @@
+@localUrl = http://localhost:7071
+@endpoint = api/HtmlToPdf
+@htmlToConvert = <div>Hello</div>
+
+### No params (Invalid)
+GET {{localUrl}}/{{endpoint}}
+
+### Query params
+GET {{localUrl}}/{{endpoint}}/?html={{htmlToConvert}}
+
+### Params on body
+POST {{localUrl}}/{{endpoint}}
+Content-Type: application/json
+
+{
+  "html": "{{htmlToConvert}}"
+}
+
+### Remote call
+### Prepare this call by adding 'SVRLSSPDF_REMOTE_URL' and 'SVRLSSPDF_API_HTMLTOPDF_CODE' values to a local .env file
+@remoteUrl = {{$processEnv SVRLSSPDF_REMOTE_URL}}{{$dotenv SVRLSSPDF_REMOTE_URL}}
+@authenticationCode = {{$processEnv SVRLSSPDF_API_HTMLTOPDF_CODE}}{{$dotenv SVRLSSPDF_API_HTMLTOPDF_CODE}}
+
+GET {{remoteUrl}}/{{endpoint}}/?html={{htmlToConvert}}&&code={{authenticationCode}}

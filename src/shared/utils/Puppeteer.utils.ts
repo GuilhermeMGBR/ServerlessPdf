@@ -5,10 +5,13 @@ const chromium = require('@sparticuz/chromium');
 
 import type {
   PDFOptions,
+  Page,
   PuppeteerLaunchOptions,
   WaitForOptions,
 } from 'puppeteer-core';
 import type {ILogger} from '@shared/logger.types';
+
+export type PageHandler = {page: Page; cleanup: () => Promise<void>};
 
 const getPuppeteerExecutablePath = async () => {
   if (platform() !== 'darwin') {
@@ -29,7 +32,7 @@ const DEFAULT_WAIT_FOR_OPTIONS: WaitForOptions = {waitUntil: 'networkidle2'};
 export const getHeadlessBrowser = async () =>
   await launch(await getBrowserLaunchOptions());
 
-export const getPage = async (logger: ILogger) => {
+export const getPage = async (logger: ILogger): Promise<PageHandler> => {
   const browser = await getHeadlessBrowser();
 
   const page = await browser.newPage();
@@ -49,21 +52,21 @@ export const getPage = async (logger: ILogger) => {
   return {page, cleanup};
 };
 
-export const openPage = async (
+const loadPageWithLoggingAndCleanup = async (
   logger: ILogger,
-  url: string,
-  options: WaitForOptions = DEFAULT_WAIT_FOR_OPTIONS,
-) => {
-  const {page, cleanup} = await getPage(logger);
-
+  {page, cleanup}: PageHandler,
+  loader: () => Promise<unknown>,
+  errorTag: string,
+  errorContext: string = '',
+): Promise<PageHandler> => {
   try {
-    logger.info('Loading URL:', url);
+    logger.info('Loading');
 
-    await page.goto(url, options);
+    await loader();
 
-    logger.info('Loaded URL');
+    logger.info('Loaded');
   } catch (error: unknown) {
-    logger.error({errorTag: 'openPage:Error', error});
+    logger.error({errorTag, errorContext, error});
 
     await cleanup();
   }
@@ -71,16 +74,13 @@ export const openPage = async (
   return {page, cleanup};
 };
 
-export const getPdf = async (
+const getPdf = async (
   logger: ILogger,
-  url: string,
+  {page, cleanup}: PageHandler,
   options: PDFOptions = DEFAULT_PDF_OPTIONS,
-  waitOptions: WaitForOptions = DEFAULT_WAIT_FOR_OPTIONS,
 ): Promise<Buffer | undefined> => {
-  const {page, cleanup} = await openPage(logger, url, waitOptions);
-
   if (page.isClosed()) {
-    logger.error({errorTag: 'getPdf:Error', error: 'Page is closed'});
+    logger.error({errorTag: 'getPdf', error: 'Page is closed'});
 
     await cleanup();
 
@@ -90,10 +90,53 @@ export const getPdf = async (
   try {
     return await page.pdf(options);
   } catch (error: unknown) {
-    logger.error({errorTag: 'getPdf:Error', error});
+    logger.error({errorTag: 'getPdf', error});
 
     return undefined;
   } finally {
     await cleanup();
   }
+};
+
+export const loadPageFromUrl = async (
+  logger: ILogger,
+  pageHandler: PageHandler,
+  url: string,
+  options: WaitForOptions = DEFAULT_WAIT_FOR_OPTIONS,
+): Promise<PageHandler> =>
+  await loadPageWithLoggingAndCleanup(
+    logger,
+    pageHandler,
+    () => pageHandler.page.goto(url, options),
+    'loadPageFromUrl',
+    url,
+  );
+
+export const loadPageFromHtml = async (
+  logger: ILogger,
+  pageHandler: PageHandler,
+  html: string,
+  options: WaitForOptions = DEFAULT_WAIT_FOR_OPTIONS,
+): Promise<PageHandler> =>
+  await loadPageWithLoggingAndCleanup(
+    logger,
+    pageHandler,
+    async () => await pageHandler.page.setContent(html, options),
+    'loadPageFromHtml',
+  );
+
+export const getPdfFromUrl = async (logger: ILogger, url: string) => {
+  const pageHandler = await loadPageFromUrl(logger, await getPage(logger), url);
+
+  return await getPdf(logger, pageHandler);
+};
+
+export const getPdfFromHtml = async (logger: ILogger, html: string) => {
+  const pageHandler = await loadPageFromHtml(
+    logger,
+    await getPage(logger),
+    html,
+  );
+
+  return await getPdf(logger, pageHandler);
 };

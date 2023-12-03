@@ -2,9 +2,9 @@ import {
   hasParams,
   unwrapValidParams,
   VALID_PARAMS_EXAMPLE,
-} from './UrlToPdf.types';
+} from './HtmlToPdf.types';
 
-describe('UrlToPdf:Types', () => {
+describe('HtmlToPdf:Types', () => {
   describe('hasParams', () => {
     it.each([
       ['empty object', {}, false],
@@ -27,10 +27,8 @@ describe('UrlToPdf:Types', () => {
       ['invalid', ''],
       ['invalid', null],
       ['invalid', undefined],
-      ['invalid', {url: 'not an url'}],
-      ['invalid', {url: ''}],
-      ['valid', {url: 'https://url.dev'}],
-      ['valid', {url: 'https://url.dev?param1=xyz&param2@$#'}],
+      ['invalid', {html: ''}],
+      ['valid', {html: '<div>Hello</div>'}],
     ])('unwraps params as %s (%s)', (scenario: string, params: unknown) => {
       const hasInvalidParams = unwrapValidParams(params);
 

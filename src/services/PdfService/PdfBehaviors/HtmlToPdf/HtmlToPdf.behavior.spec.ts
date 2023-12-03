@@ -6,14 +6,15 @@ import {
   getURLSearchParamsFromObject,
 } from '@shared/test.utils';
 import * as utils from '@shared/utils/Puppeteer.utils';
-import {ERROR_PDF_GENERATION, urlToPdfBehavior} from './UrlToPdf.behavior';
-import {INVALID_PARAMS_EXAMPLE, VALID_PARAMS_EXAMPLE} from './UrlToPdf.types';
+import {ERROR_PDF_GENERATION, htmlToPdfBehavior} from './HtmlToPdf.behavior';
+import {INVALID_PARAMS_EXAMPLE, VALID_PARAMS_EXAMPLE} from './HtmlToPdf.types';
 
 import type {HttpRequest} from '@shared/index';
 
-const getPdfFromUrlSpy = jest.spyOn(utils, 'getPdfFromUrl');
+const getPdfFromHtmlSpy = jest.spyOn(utils, 'getPdfFromHtml');
+const SAMPLE_HTML = '<div>Hello</div>';
 
-describe('UrlToPdf:Behavior', () => {
+describe('HtmlToPdf:Behavior', () => {
   describe('validateRequest', () => {
     it.each([
       ['query params', getTestRequestWithSearchParams(VALID_PARAMS_EXAMPLE)],
@@ -23,7 +24,7 @@ describe('UrlToPdf:Behavior', () => {
       async (_paramsOrigin: string, request: HttpRequest) => {
         const mockLogger = createLoggerMock();
 
-        const validation = await urlToPdfBehavior.validateRequest(
+        const validation = await htmlToPdfBehavior.validateRequest(
           request,
           mockLogger,
         );
@@ -43,7 +44,7 @@ describe('UrlToPdf:Behavior', () => {
       async (_paramsOrigin: string, request: HttpRequest) => {
         const mockLogger = createLoggerMock();
 
-        const validation = await urlToPdfBehavior.validateRequest(
+        const validation = await htmlToPdfBehavior.validateRequest(
           request,
           mockLogger,
         );
@@ -72,7 +73,7 @@ describe('UrlToPdf:Behavior', () => {
               : INVALID_PARAMS_EXAMPLE,
         });
 
-        const validation = await urlToPdfBehavior.validateRequest(
+        const validation = await htmlToPdfBehavior.validateRequest(
           request,
           mockLogger,
         );
@@ -89,15 +90,17 @@ describe('UrlToPdf:Behavior', () => {
     it('handles pdf generation errors with logging', async () => {
       const mockLogger = createLoggerMock();
 
-      getPdfFromUrlSpy.mockImplementationOnce(() => Promise.resolve(undefined));
+      getPdfFromHtmlSpy.mockImplementationOnce(() =>
+        Promise.resolve(undefined),
+      );
 
-      const params = {url: 'https://www.google.com'};
+      const params = {html: SAMPLE_HTML};
 
-      const response = await urlToPdfBehavior.run(params, mockLogger);
+      const response = await htmlToPdfBehavior.run(params, mockLogger);
 
       expect(mockLogger.error).toHaveBeenCalledWith({
-        errorTag: 'urlToPdfBehavior:run:Error',
-        errorContext: params.url,
+        errorTag: 'HtmlToPdfBehavior:run:Error',
+        errorContext: params.html,
         error: ERROR_PDF_GENERATION,
       });
 
@@ -112,8 +115,8 @@ describe('UrlToPdf:Behavior', () => {
       async () => {
         const mockLogger = createLoggerMock();
 
-        const response = await urlToPdfBehavior.run(
-          {url: 'https://www.google.com'},
+        const response = await htmlToPdfBehavior.run(
+          {html: SAMPLE_HTML},
           mockLogger,
         );
 

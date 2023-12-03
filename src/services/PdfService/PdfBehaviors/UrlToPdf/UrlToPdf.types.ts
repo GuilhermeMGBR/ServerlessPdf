@@ -1,8 +1,8 @@
 import {z} from 'zod';
 import {hasParamWithValue, unwrapValidData} from '@shared/base.types';
 
-export const VALID_PARAMS_EXAMPLE = {url: 'https://github.com'};
-export const INVALID_PARAMS_EXAMPLE = {url: 'not a URL'};
+export const VALID_PARAMS_EXAMPLE: UrlToPdfParams = {url: 'https://github.com'};
+export const INVALID_PARAMS_EXAMPLE: UrlToPdfParams = {url: 'not a URL'};
 
 const paramsSchema = z.object({
   url: z.string().trim().min(1).url(),

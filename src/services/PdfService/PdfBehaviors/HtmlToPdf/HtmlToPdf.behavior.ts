@@ -9,18 +9,18 @@ import {
   getOkResponse,
   getQueryAsJson,
 } from '@shared/http.types';
-import {getPdfFromUrl} from '@shared/utils/Puppeteer.utils';
-import {hasParams, unwrapValidParams} from './UrlToPdf.types';
+import {getPdfFromHtml} from '@shared/utils/Puppeteer.utils';
+import {hasParams, unwrapValidParams} from './HtmlToPdf.types';
 
 import type {IServiceBehavior} from '@shared/BaseService/BaseServiceBehavior/BaseServiceBehavior.types';
-import type {UrlToPdfParams} from './UrlToPdf.types';
+import type {HtmlToPdfParams} from './HtmlToPdf.types';
 
 const INVALID_PARAMS_MESSAGE = 'Invalid params';
 export const ERROR_PDF_GENERATION = 'Unable to generate PDF';
 
-export const urlToPdfBehavior: IServiceBehavior<UrlToPdfParams> = {
+export const htmlToPdfBehavior: IServiceBehavior<HtmlToPdfParams> = {
   validateRequest: async (request, logger) => {
-    const query = getQueryAsJson(request, 'url');
+    const query = getQueryAsJson(request, 'html');
 
     const hasQueryParams = hasParams(query);
     if (hasQueryParams && unwrapValidParams(query)) {
@@ -47,14 +47,14 @@ export const urlToPdfBehavior: IServiceBehavior<UrlToPdfParams> = {
   },
 
   run: async (params, logger) => {
-    logger.info(`Exporting URL`);
+    logger.info(`Exporting HTML`);
 
-    const pdfBuffer = await getPdfFromUrl(logger, params.url);
+    const pdfBuffer = await getPdfFromHtml(logger, params.html);
 
     if (!pdfBuffer) {
       logger.error({
-        errorTag: 'urlToPdfBehavior:run:Error',
-        errorContext: params.url,
+        errorTag: 'HtmlToPdfBehavior:run:Error',
+        errorContext: params.html,
         error: ERROR_PDF_GENERATION,
       });
 
