@@ -5,16 +5,48 @@ import {
   getTestRequestWithSearchParams,
   getURLSearchParamsFromObject,
 } from '@shared/test.utils';
-import * as utils from '@shared/utils/Puppeteer.utils';
-import {urlToPdfBehavior} from './UrlToPdf.behavior';
-import {INVALID_PARAMS_EXAMPLE, VALID_PARAMS_EXAMPLE} from './UrlToPdf.types';
+import {baseQueryBodyBehavior} from './BaseQueryBodyBehavior.behavior';
 
 import type {HttpRequest} from '@shared/index';
+import {hasParamWithValue} from '@shared/base.types';
 
-const getPdfFromUrlSpy = jest.spyOn(utils, 'getPdfFromUrl');
-export const ERROR_PDF_GENERATION = 'Unable to generate PDF';
+describe('BasePdfGeneration:Behavior', () => {
+  const paramName = 'paramName';
+  type TestBasePdfGenerationParams = {paramName: string};
 
-describe('UrlToPdf:Behavior', () => {
+  const VALID_PARAMS_EXAMPLE: TestBasePdfGenerationParams = {
+    paramName: 'Valid',
+  };
+
+  const INVALID_PARAMS_EXAMPLE: TestBasePdfGenerationParams = {
+    paramName: 'Invalid',
+  };
+
+  const ERROR_PDF_GENERATION = 'Unable to generate PDF';
+  const RUN_ERROR_TAG = 'testBasePdfGenerationBehavior:run';
+
+  const testHasParams = (params: unknown) =>
+    hasParamWithValue(paramName, params);
+
+  const testUnwrapValidParams = <T>(params: unknown): params is T => {
+    return (
+      typeof params === 'object' &&
+      !!params &&
+      paramName in params &&
+      params[paramName] === 'Valid'
+    );
+  };
+
+  const mockRun = jest.fn();
+
+  const testBasePdfGenerationBehavior = baseQueryBodyBehavior(
+    paramName,
+    testHasParams,
+    testUnwrapValidParams,
+    mockRun,
+    {tag: RUN_ERROR_TAG, message: ERROR_PDF_GENERATION},
+  );
+
   describe('validateRequest', () => {
     it.each([
       ['query params', getTestRequestWithSearchParams(VALID_PARAMS_EXAMPLE)],
@@ -24,7 +56,7 @@ describe('UrlToPdf:Behavior', () => {
       async (_paramsOrigin: string, request: HttpRequest) => {
         const mockLogger = createLoggerMock();
 
-        const validation = await urlToPdfBehavior.validateRequest(
+        const validation = await testBasePdfGenerationBehavior.validateRequest(
           request,
           mockLogger,
         );
@@ -44,7 +76,7 @@ describe('UrlToPdf:Behavior', () => {
       async (_paramsOrigin: string, request: HttpRequest) => {
         const mockLogger = createLoggerMock();
 
-        const validation = await urlToPdfBehavior.validateRequest(
+        const validation = await testBasePdfGenerationBehavior.validateRequest(
           request,
           mockLogger,
         );
@@ -73,7 +105,7 @@ describe('UrlToPdf:Behavior', () => {
               : INVALID_PARAMS_EXAMPLE,
         });
 
-        const validation = await urlToPdfBehavior.validateRequest(
+        const validation = await testBasePdfGenerationBehavior.validateRequest(
           request,
           mockLogger,
         );
@@ -90,14 +122,17 @@ describe('UrlToPdf:Behavior', () => {
     it('handles pdf generation errors with logging', async () => {
       const mockLogger = createLoggerMock();
 
-      getPdfFromUrlSpy.mockImplementationOnce(() => Promise.resolve(undefined));
+      mockRun.mockImplementationOnce(() => Promise.resolve(undefined));
 
-      const params = {url: 'https://www.google.com'};
+      const params = VALID_PARAMS_EXAMPLE;
 
-      const response = await urlToPdfBehavior.run(params, mockLogger);
+      const response = await testBasePdfGenerationBehavior.run(
+        params,
+        mockLogger,
+      );
 
       expect(mockLogger.error).toHaveBeenCalledWith({
-        errorTag: 'UrlToPdfBehavior:run',
+        errorTag: RUN_ERROR_TAG,
         errorContext: params,
         error: ERROR_PDF_GENERATION,
       });
@@ -107,22 +142,5 @@ describe('UrlToPdf:Behavior', () => {
         status: 500,
       });
     });
-
-    (process.env.INCLUDE_INTEGRATION_TESTS === 'true' ? it : it.skip)(
-      '[Integration] responds with a Pdf',
-      async () => {
-        const mockLogger = createLoggerMock();
-
-        const response = await urlToPdfBehavior.run(
-          {url: 'https://www.google.com'},
-          mockLogger,
-        );
-
-        expect(response).toBeDefined();
-        expect(response?.status).toBe(200);
-        expect(response?.body).toBeDefined();
-      },
-      15_000,
-    );
   });
 });

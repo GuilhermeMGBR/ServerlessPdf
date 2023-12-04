@@ -6,13 +6,14 @@ import {
   getURLSearchParamsFromObject,
 } from '@shared/test.utils';
 import * as utils from '@shared/utils/Puppeteer.utils';
-import {ERROR_PDF_GENERATION, htmlToPdfBehavior} from './HtmlToPdf.behavior';
+import {htmlToPdfBehavior} from './HtmlToPdf.behavior';
 import {INVALID_PARAMS_EXAMPLE, VALID_PARAMS_EXAMPLE} from './HtmlToPdf.types';
 
 import type {HttpRequest} from '@shared/index';
 
 const getPdfFromHtmlSpy = jest.spyOn(utils, 'getPdfFromHtml');
 const SAMPLE_HTML = '<div>Hello</div>';
+const ERROR_PDF_GENERATION = 'Unable to generate PDF';
 
 describe('HtmlToPdf:Behavior', () => {
   describe('validateRequest', () => {
@@ -99,8 +100,8 @@ describe('HtmlToPdf:Behavior', () => {
       const response = await htmlToPdfBehavior.run(params, mockLogger);
 
       expect(mockLogger.error).toHaveBeenCalledWith({
-        errorTag: 'HtmlToPdfBehavior:run:Error',
-        errorContext: params.html,
+        errorTag: 'HtmlToPdfBehavior:run',
+        errorContext: params,
         error: ERROR_PDF_GENERATION,
       });
 
