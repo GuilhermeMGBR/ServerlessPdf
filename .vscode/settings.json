@@ -49,6 +49,7 @@
     "sonarsource",
     "sparticuz",
     "SVRLSSPDF",
+    "wfco",
     "wtao"
   ],
   "jest.rootPath": "src",
