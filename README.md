@@ -85,6 +85,7 @@
 - [About the application](#about-the-application)
   - [Technologies](#technologies)
   - [Tools](#tools)
+- [Before you begin](#before-you-begin)
 - [Getting started](#getting-started)
 - [Development](#development)
 - [License](#license)
