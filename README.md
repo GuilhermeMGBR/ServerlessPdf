@@ -115,6 +115,12 @@ A simple serverless PDF generation API with Azure functions in Typescript.
 
 <sup><a href="#index" title="Return to index">&UpArrowBar;</a></sup>
 
+## Before you begin
+
+For a production ready alternative, check [Doppio](https://doppio.sh)!
+
+They have a *Puppeteer like* wrapper API and (at the time of this update) a free tier with up to 400 docs / month.
+
 ## Getting started
 
 <details><summary>Environment configuration</summary>
