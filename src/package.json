@@ -25,7 +25,7 @@
     "sonar-server:base": "docker run --detach --rm --publish 127.0.0.1:9000:9000 --name sonarqube-server sonarqube:lts-community",
     "sonar-server:start": "yarn sonar-server:base sonarqube:lts-community",
     "sonar-server:start-persistent": "yarn sonar-server:base --env-file ../.env.sonar-server.local sonarqube:lts-community",
-    "watch:generic": "npx onchange '**/*' -e 'dist/**/*' --",
+    "watch:generic": "npx onchange '**/*' --exclude 'dist/**/*' --",
     "watch:format-check": "yarn wg yarn base:prettier --check .",
     "watch:format-check-onlyChanged": "yarn wg yarn base:prettier --check {{changed}}",
     "watch:lint": "yarn wg yarn eslint .",
