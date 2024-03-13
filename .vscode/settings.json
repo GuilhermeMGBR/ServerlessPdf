@@ -62,5 +62,5 @@
     "yoavbls"
   ],
   "jest.rootPath": "src",
-  "jest.autoRun": "off"
+  "jest.runMode": "on-demand"
 }
