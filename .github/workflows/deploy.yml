@@ -8,7 +8,7 @@ on:
 
 env:
   APP_NAME: "serverless-pdf" # Function app name on Azure
-  NODE_VERSION: "18.x"
+  NODE_VERSION: "22.x"
   PACKAGE_JSON_PATH: "src"
   BUILD_PATH: "dist"
   PUBLISH_PROFILE: ${{secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE}}
