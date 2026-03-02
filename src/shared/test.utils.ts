@@ -1,4 +1,4 @@
-import {ReadableStream} from 'stream/web';
+import {ReadableStream} from 'node:stream/web';
 import {HttpRequest} from './http.types';
 
 export type NonEmptyObject = {[x: string]: string};

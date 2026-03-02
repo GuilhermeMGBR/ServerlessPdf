@@ -1,4 +1,4 @@
-import {platform} from 'os';
+import {platform} from 'node:os';
 import {launch} from 'puppeteer-core';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const chromium = require('@sparticuz/chromium');
@@ -6,7 +6,7 @@ const chromium = require('@sparticuz/chromium');
 import type {
   PDFOptions,
   Page,
-  PuppeteerLaunchOptions,
+  LaunchOptions,
   WaitForOptions,
 } from 'puppeteer-core';
 import type {ILogger} from '@shared/logger.types';
@@ -21,8 +21,8 @@ const getPuppeteerExecutablePath = async () => {
 };
 
 // TODO: evaluate sandbox with Azure Functions
-const getBrowserLaunchOptions = async (): Promise<PuppeteerLaunchOptions> => ({
-  headless: 'new',
+const getBrowserLaunchOptions = async (): Promise<LaunchOptions> => ({
+  headless: true,
   args: ['--no-sandbox', '--disable-setuid-sandbox'],
   executablePath: await getPuppeteerExecutablePath(),
 });
@@ -78,7 +78,7 @@ const getPdf = async (
   logger: ILogger,
   {page, cleanup}: PageHandler,
   options: PDFOptions = DEFAULT_PDF_OPTIONS,
-): Promise<Buffer | undefined> => {
+): Promise<Uint8Array | undefined> => {
   if (page.isClosed()) {
     logger.error({errorTag: 'getPdf', error: 'Page is closed'});
 

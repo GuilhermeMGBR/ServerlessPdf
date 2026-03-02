@@ -26,8 +26,11 @@
     "*.dat": "json"
   },
   "cSpell.words": [
+    "appsettings",
     "azurefunctions",
     "azuretools",
+    "blobstorage",
+    "cscfg",
     "dbaeumer",
     "devcontainer",
     "devcontainers",
@@ -50,6 +53,9 @@
     "Parens",
     "postbuild",
     "prestart",
+    "pycache",
+    "queuestorage",
+    "scannerwork",
     "sonarcloud",
     "sonarlint",
     "sonarqube",
@@ -57,6 +63,7 @@
     "sparticuz",
     "SVRLSSPDF",
     "usernamehw",
+    "venv",
     "wfco",
     "wtao",
     "yoavbls"

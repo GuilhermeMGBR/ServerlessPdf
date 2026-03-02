@@ -14,7 +14,7 @@ function convertToBabelAliases(tsConfigPaths) {
 
   for (const [key, value] of Object.entries(tsConfigPaths)) {
     if (value.length > 1) {
-      throw Error(
+      throw new Error(
         '[Babel.config]: Conversion from multiple path alias not supported',
       );
     }

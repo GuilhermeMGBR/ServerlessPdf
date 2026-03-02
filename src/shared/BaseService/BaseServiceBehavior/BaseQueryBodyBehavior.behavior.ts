@@ -19,7 +19,7 @@ export const baseQueryBodyBehavior = <T>(
   paramName: string,
   hasParams: (params?: unknown) => boolean,
   unwrapValidParams: (params: unknown) => params is T,
-  run: (logger: ILogger, params: T) => Promise<Buffer | undefined>,
+  run: (logger: ILogger, params: T) => Promise<Uint8Array | undefined>,
   runError: {tag: string; message: string},
 ): IServiceBehavior<T> => ({
   validateRequest: async (request, logger) => {

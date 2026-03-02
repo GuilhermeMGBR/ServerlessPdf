@@ -1,4 +1,4 @@
-import {z, ZodSchema} from 'zod';
+import {z} from 'zod';
 
 export const stringWith254Characters =
   'LoremipsumdolorsitametconsectetueradipiscingelitAeneancommodoligulaegetdolorAeneanmassaCumsociisnatoquepenatibusetmagnisdisparturientmontesnasceturridiculusmusDonecquamfelisultriciesnecpellentesqueeupretiumquissemNullaconsequatmasjshdueoldhadwiurfmfkvius';
@@ -16,7 +16,7 @@ export const zodNonEmptyStringWithUpto255LettersNumbersOrSpaces =
   zodStringWithLettersNumbersOrSpaces.min(1).max(255);
 
 export const unwrapValidData =
-  (schema: ZodSchema) =>
+  (schema: z.ZodTypeAny) =>
   <T>(data: unknown): data is T =>
     schema.safeParse(data).success;
 

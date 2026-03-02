@@ -5,7 +5,7 @@ export const VALID_PARAMS_EXAMPLE: UrlToPdfParams = {url: 'https://github.com'};
 export const INVALID_PARAMS_EXAMPLE: UrlToPdfParams = {url: 'not a URL'};
 
 const paramsSchema = z.object({
-  url: z.string().trim().min(1).url(),
+  url: z.url().min(1),
 });
 
 export type UrlToPdfParams = z.infer<typeof paramsSchema>;
