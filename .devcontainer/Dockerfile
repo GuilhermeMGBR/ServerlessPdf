@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/typescript-node:0-18-bullseye
+FROM mcr.microsoft.com/devcontainers/typescript-node:0-22-bullseye
 
 RUN apt-get update && \
   sudo apt install --yes \
